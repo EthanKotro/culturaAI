@@ -6,7 +6,7 @@ Firebase settings configuration
 FIREBASE_ADMIN_CREDENTIALS = 'path/to/firebase-adminsdk.json'  # Update this path to where you saved your service account key
 
 # Firebase project settings
-FIREBASE_API_KEY = 'AIzaSyDl6av2tvpT9Qd2mF9_HLoPQQ0k1lv1lwc'
+FIREBASE_API_KEY = ''
 FIREBASE_AUTH_DOMAIN = 'culturatranslator-a.firebaseapp.com'
 FIREBASE_PROJECT_ID = 'culturatranslator-a'
 FIREBASE_STORAGE_BUCKET = 'culturatranslator-a.firebasestorage.app'
