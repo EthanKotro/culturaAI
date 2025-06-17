@@ -1,6 +1,7 @@
 from rest_framework import generics, status, permissions
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from django.db.models import Q, Avg, Count
 from django.utils import timezone
 from .models import Game, GameSession, GameLeaderboard, Achievement, UserAchievement

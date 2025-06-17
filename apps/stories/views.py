@@ -8,7 +8,23 @@ from .serializers import (
     StoryCollectionSerializer, StoryRatingSerializer
 )
 
-
+@api_view(['GET'])
+def get_stories(request):
+    stories = [
+        {
+            "id": 1,
+            "title": "The Wise Hare and the Elephant",
+            "content": "Long ago in the forests of Mount Kenya...",
+            "language": "ki",
+            "category": "wisdom",
+            "difficulty": "beginner",
+            "likes": 45,
+            "views": 234,
+            "audioUrl": "/audio/hare-elephant-ki.mp3"
+        },
+        ...
+    ]
+    return Response({"stories": stories})
 class StoryListView(generics.ListAPIView):
     """List stories with filtering"""
     serializer_class = StoryListSerializer
