@@ -1,1 +1,0 @@
-# Cultura AI Backend Package

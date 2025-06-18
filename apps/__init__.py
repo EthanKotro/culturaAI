@@ -1,1 +1,0 @@
-# Cultura AI Apps Package
