@@ -10,11 +10,11 @@ class StorySerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Story
-        fields = [ '__all__'
-            # 'id', 'title', 'content', 'summary', 'language', 'cultural_origin',
-            # 'category', 'difficulty', 'audio_url', 'image_url', 'views', 'likes',
-            # 'author', 'source', 'featured', 'created_at', 'average_rating',
-            # 'total_ratings', 'user_rating'
+        fields = [
+            'id', 'title', 'content', 'summary', 'language', 'cultural_origin',
+            'category', 'difficulty', 'audio_url', 'image_url', 'views', 'likes',
+            'author', 'source', 'featured', 'created_at', 'average_rating',
+            'total_ratings', 'user_rating'
         ]
     
     def get_average_rating(self, obj):
