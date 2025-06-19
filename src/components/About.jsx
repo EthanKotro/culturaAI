@@ -2,8 +2,8 @@ import React from 'react'
 
 const About = () => {
   return (
-    <div className='about-wrapper'>
-      <div className="about-container border-b-1 border-b-red-500 bg-[#342603]/90 p-6 flex h-[calc(100vh-80px)] text-white justify-around items-center">
+    <div className='about-wrapper' id='about'>
+      <div className="about-container border-b-1 border-b-red-500 bg-[#342603]/90 p-6 flex h-[100vh] text-white justify-around items-center">
           <div className="flex flex-col w-[40%] space-y-2">
             <h1 className='text-green-500 font-semibold'>Embrace your heritage</h1>
             <h2 className='text-2xl font-bold'>Explore, learn, and connect</h2>

@@ -1,16 +1,22 @@
 import './App.css'
 import About from './components/About'
+import Contact from './components/Contact'
 import Header from './components/Header'
 import Home from './components/Home'
+import HowItWorks from './components/HowItWorks'
 import Services from './components/Services'
 
 function App() {
   return (
     <>
       <Header />
-      <Home />
-      <About />
-      <Services />
+      <div className="w-[100vw] overflow-x-hidden">
+        <Home />
+        <About />
+        <Services />
+        <HowItWorks />
+        <Contact />
+      </div>
     </>
   )
 }
