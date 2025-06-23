@@ -1,8 +1,48 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { TfiEmail } from "react-icons/tfi";
 import { CiLocationOn } from "react-icons/ci";
+import axios from 'axios';
 
 const Contact = () => {
+
+    const [message, setMessage] = useState('');
+
+    useEffect(() => async () => {
+
+        console.log(import.meta.env.VITE_API_URL);
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/contacts/`);
+            console.log("Backend Response:", response);
+            setMessage(response.data);
+        } catch (error) {
+         console.error('Error fetching data:', error);
+         setMessage('Failed to load message. Please try again later.');   
+        }
+        
+        const handleSubmit = async (e) => { // handle form submission
+            e.preventDefault(); // prevent default form behavior
+            const form = e.target; // get the form element
+            const data = { // collect form data
+                name: form[0].value, // get name input value
+                email: form[1].value, // get email input value
+                phone_number: form[2].value, // get phone number input value
+                message: form[3].value, // get message textarea value
+                consent: form[4].checked // get checkbox value
+            };
+            try {
+                const response = await axios.post(`${import.meta.env.VITE_API_URL}/contacts/`, data); // send POST request
+                setMessage('Message sent successfully!'); // update message state on success
+                form.reset(); // reset form fields
+            } catch (error) {
+                setMessage('Failed to send message. Please try again later.'); // update message state on error
+                console.error('Error posting data:', error); // log error
+            }
+        };
+
+        // Add this handler to the form element in the JSX: onSubmit={handleSubmit}
+
+    }, [])
+
   return (
     <div className='contact-wrapper' id='contact'>
     <div className="contact-container border-b-1 border-b-red-500 bg-[#342603]/90 p-6 flex flex-col text-white justify-start">
@@ -71,6 +111,22 @@ const Contact = () => {
                         </tbody>
                     </table>
                 </div>
+            </div>
+            <div className='flex flex-col justify-center items-center p-6 mt-6 bg-[#342603]/40 rounded-sm'>
+                {/* {message.map((msg, index) => (
+                    <p key={index} className='text-lg text-white mt-4'>{msg}</p>))} */}
+                {Array.isArray(message) && message.length > 0 ? (
+                message.map((msg, index) => (
+                    <div key={msg.id} className='text-white p-4 bg-[#2c2002] rounded mb-2 w-full'>
+                    <p><strong>Name:</strong> {msg.name}</p>
+                    <p><strong>Email:</strong> {msg.email}</p>
+                    <p><strong>Phone:</strong> {msg.phone_number}</p>
+                    <p><strong>Message:</strong> {msg.message}</p>
+                    </div>
+                ))
+                ) : (
+                <p className='text-lg text-white mt-4'>{message}</p>  // fallback for error string
+                )}
             </div>
         </div>
     </div>

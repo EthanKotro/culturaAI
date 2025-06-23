@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Italianno&display=swap');
+
 #root {
   margin: 0;
   padding: 0;
@@ -8,3 +10,10 @@
 /* .hd-container > .hd-list:last-child {
   text-transform: capitalize;
 } */
+
+.italianno-regular {
+  font-family: "Italianno", cursive;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 45px;
+}

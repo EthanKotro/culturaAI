@@ -4,6 +4,7 @@ import Contact from './components/Contact'
 import Header from './components/Header'
 import Home from './components/Home'
 import HowItWorks from './components/HowItWorks'
+import Roles from './components/Roles'
 import Services from './components/Services'
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         <About />
         <Services />
         <HowItWorks />
+        <Roles />
         <Contact />
       </div>
     </>

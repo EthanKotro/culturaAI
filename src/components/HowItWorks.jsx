@@ -15,7 +15,7 @@ const HowItWorks = () => {
                             </div>
                             <h1 className='text-2xl font-semibold my-2 ps-1 pt-3'>AI Voice Translator 1</h1>
                             <p className='text-xl mt-2 mb-4 ps-1 text-wrap'>Translate and narrate phrases into native African languages.</p>
-                            <span className='underline cursor-pointer'>Learn more</span>
+                            <span className='underline cursor-pointer p-1'>Learn more</span>
                         </div>
                         <div className="card flex flex-col hover:bg-[#342603]/30 mt-10 h-[25rem]">
                             <div className='m-0 p-0 left-0 top-0 overflow-hidden h-[16rem]'>
@@ -23,7 +23,7 @@ const HowItWorks = () => {
                             </div>
                             <h1 className='text-2xl font-semibold my-2 ps-1 pt-3'>AI Voice Translator 1</h1>
                             <p className='text-xl mt-2 mb-4 ps-1 text-wrap'>Translate and narrate phrases into native African languages.</p>
-                            <span className='underline cursor-pointer'>Learn more</span>
+                            <span className='underline cursor-pointer p-1'>Learn more</span>
                         </div>
                         <div className="card flex flex-col hover:bg-[#342603]/30 mt-10 h-[25rem]">
                             <div className='m-0 p-0 left-0 top-0 overflow-hidden h-[16rem]'>
@@ -31,7 +31,7 @@ const HowItWorks = () => {
                             </div>
                             <h1 className='text-2xl font-semibold my-2 ps-1 pt-3'>AI Voice Translator 1</h1>
                             <p className='text-xl mt-2 mb-4 ps-1 text-wrap'>Translate and narrate phrases into native African languages.</p>
-                            <span className='underline cursor-pointer'>Learn more</span>
+                            <span className='underline cursor-pointer p-1'>Learn more</span>
                         </div>
                         <div className="card flex flex-col hover:bg-[#342603]/30 mt-10 h-[25rem]">
                             <div className='m-0 p-0 left-0 top-0 overflow-hidden h-[16rem]'>
@@ -39,7 +39,7 @@ const HowItWorks = () => {
                             </div>
                             <h1 className='text-2xl font-semibold my-2 ps-1 pt-3'>AI Voice Translator 1</h1>
                             <p className='text-xl mt-2 mb-4 ps-1 text-wrap'>Translate and narrate phrases into native African languages.</p>
-                            <span className='underline cursor-pointer'>Learn more</span>
+                            <span className='underline cursor-pointer p-1'>Learn more</span>
                         </div>
                     </div>
                 </div>
