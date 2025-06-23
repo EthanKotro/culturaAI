@@ -1,9 +1,12 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Layout } from './components/Layout/Layout';
-import { motion } from 'framer-motion';
+import { useState } from 'react'
+import './App.css'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { motion } from 'framer-motion'
+import { Layout } from './components/Layout/Layout'
 
 function App() {
+  const [count, setCount] = useState(0)
+
   return (
     <Router>
       <motion.div 
@@ -18,7 +21,7 @@ function App() {
         </Routes>
       </motion.div>
     </Router>
-  );
+  )
 }
 
-export default App;
+export default App

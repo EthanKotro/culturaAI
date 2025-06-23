@@ -17,21 +17,21 @@ export const TranslationHub: React.FC = () => {
     setIsTranslating(true);
     
     try {
-      const response = await fetch('https://api-inference.huggingface.co/models/EthanKotro/kikuyu-translation-train', {
+      const response = await fetch('http://localhost:8000/api/v1/translate', {
         method: 'POST',
-        headers: {          
+        headers: {
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          inputs: sourceText,
-          // parameters: {
-          //   source_language: sourceLang,
-          //   target_language: targetLang,
-          // },
+          source_text: sourceText,
+          source_language: sourceLang,
+          target_language: targetLang,
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Translation service error');
+        const error = await response.json();
+        throw new Error(error.error||'Translation service error');
       }
 
       const data = await response.json();

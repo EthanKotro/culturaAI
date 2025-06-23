@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BookOpen, Play, Pause, Heart, Eye, Star, Filter } from 'lucide-react';
 import { useAppStore } from '../../store/useAppStore';
 import { motion } from 'framer-motion';
+import { StoryDetail } from './StoryDetail';
 
 export const StoryExplorer: React.FC = () => {
   const { availableLanguages, setStories, stories, setCurrentStory } = useAppStore();
@@ -10,68 +11,25 @@ export const StoryExplorer: React.FC = () => {
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   const [currentAudio, setCurrentAudio] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [selectedStory, setSelectedStory] = useState<any | null>(null);
 
-  // Mock stories data
   useEffect(() => {
-    const mockStories = [
-      {
-        id: '1',
-        title: 'The Wise Hare and the Elephant',
-        content: 'Long ago in the forests of Mount Kenya, there lived a clever hare who outwitted the mighty elephant...',
-        language: 'ki',
-        category: 'wisdom',
-        difficulty: 'beginner' as const,
-        likes: 45,
-        views: 234,
-        audioUrl: '/audio/hare-elephant-ki.mp3'
-      },
-      {
-        id: '2',
-        title: 'Lwanda Magere, the Stone Man',
-        content: 'In the land of the Luo people, there was a great warrior named Lwanda Magere whose body was made of stone...',
-        language: 'luo',
-        category: 'heroic',
-        difficulty: 'intermediate' as const,
-        likes: 78,
-        views: 456,
-        audioUrl: '/audio/lwanda-magere-luo.mp3'
-      },
-      {
-        id: '3',
-        title: 'The Origin of the Baobab Tree',
-        content: 'The Kamba people tell of how the great baobab tree came to be, with its roots reaching toward the sky...',
-        language: 'kam',
-        category: 'origin',
-        difficulty: 'advanced' as const,
-        likes: 62,
-        views: 189,
-        audioUrl: '/audio/baobab-origin-kam.mp3'
-      },
-      {
-        id: '4',
-        title: 'The Girl Who Married a Star',
-        content: 'A beautiful Kikuyu folktale about a young woman who fell in love with a star...',
-        language: 'ki',
-        category: 'romance',
-        difficulty: 'intermediate' as const,
-        likes: 91,
-        views: 523,
-        audioUrl: '/audio/star-girl-ki.mp3'
-      },
-      {
-        id: '5',
-        title: 'Why the Tortoise Has a Cracked Shell',
-        content: 'An amusing Luo tale explaining how the tortoise got its distinctive shell pattern...',
-        language: 'luo',
-        category: 'humor',
-        difficulty: 'beginner' as const,
-        likes: 127,
-        views: 678,
-        audioUrl: '/audio/tortoise-shell-luo.mp3'
+    const fetchStories = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/v1/stories');
+        if (!response.ok) {
+          throw new Error(`Network HTTP error! status: ${response.status}`);
+        }
+        const stories = await response.json();
+        if (!Array.isArray(stories.results)) {
+          throw new Error('Unexpected response format. Expected an array of stories.');
+        }
+        setStories(stories.results);
+      } catch (error) {
+        console.error('Error fetching stories:', error);
       }
-    ];
-    
-    setStories(mockStories);
+        };
+      fetchStories();
   }, [setStories]);
 
   const categories = ['all', 'wisdom', 'heroic', 'origin', 'romance', 'humor'];
@@ -112,6 +70,16 @@ export const StoryExplorer: React.FC = () => {
       default: return '📖';
     }
   };
+   if (selectedStory) {
+    const storyLang = availableLanguages.find(lang => lang.code === selectedStory.language);
+    return (
+      <StoryDetail
+        story={selectedStory}
+        onBack={() => setSelectedStory(null)}
+        storyLang={storyLang}
+      />
+    );
+  } 
 
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-8">
@@ -205,7 +173,7 @@ export const StoryExplorer: React.FC = () => {
               transition={{ delay: 0.2 + index * 0.1 }}
               whileHover={{ y: -5 }}
               className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-all cursor-pointer"
-              onClick={() => setCurrentStory(story)}
+              onClick={() => setSelectedStory(story)}
             >
               {/* Story Header */}
               <div className="bg-gradient-to-r from-primary-50 to-accent-50 p-4">
@@ -246,7 +214,7 @@ export const StoryExplorer: React.FC = () => {
               {/* Story Content */}
               <div className="p-4">
                 <p className="text-gray-600 text-sm line-clamp-3 mb-4">
-                  {story.content}
+                  {story.summary}
                 </p>
 
                 {/* Story Stats */}
@@ -295,4 +263,4 @@ export const StoryExplorer: React.FC = () => {
       )}
     </div>
   );
-};
+};  

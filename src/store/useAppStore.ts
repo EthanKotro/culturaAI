@@ -17,6 +17,7 @@ export interface Translation {
 }
 
 export interface Story {
+  summary: string;
   id: string;
   title: string;
   content: string;
@@ -67,7 +68,6 @@ interface AppState {
   setUser: (user: User | null) => void;
   setIsGuest: (isGuest: boolean) => void;
   setSidebarOpen: (open: boolean) => void;
-  setCurrentPage: (page: string) => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -78,6 +78,7 @@ export const useAppStore = create<AppState>((set) => ({
     { code: 'ki', name: 'Kikuyu', nativeName: 'Gĩkũyũ', flag: '🇰🇪' },
     { code: 'luo', name: 'Luo', nativeName: 'Dholuo', flag: '🇰🇪' },
     { code: 'kam', name: 'Kamba', nativeName: 'Kikamba', flag: '🇰🇪' },
+    { code: 'sw', name: 'Swahili', nativeName: 'Kiswahili', flag: '🇰🇪' },
   ],
   translations: [],
   isTranslating: false,
@@ -99,5 +100,4 @@ export const useAppStore = create<AppState>((set) => ({
   setUser: (user) => set({ user, isGuest: !user }),
   setIsGuest: (isGuest) => set({ isGuest }),
   setSidebarOpen: (open) => set({ sidebarOpen: open }),
-  setCurrentPage: (page) => set({ currentPage: page }),
 }));

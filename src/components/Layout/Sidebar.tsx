@@ -2,13 +2,11 @@ import React from 'react';
 import { X, Languages, BookOpen, Gamepad2, User, Settings, HelpCircle } from 'lucide-react';
 import { useAppStore } from '../../store/useAppStore';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
-interface SidebarProps {
-  onNavigate: (page: string) => void;
-}
-
-export const Sidebar: React.FC<SidebarProps> = ({ onNavigate }) => {
-  const { sidebarOpen, setSidebarOpen, currentPage } = useAppStore();
+export const Sidebar: React.FC = () => {
+  const navigate = useNavigate();
+  const { sidebarOpen, setSidebarOpen } = useAppStore();
 
   const menuItems = [
     { id: 'translate', icon: Languages, label: 'Translation Hub', description: 'Translate between languages' },
@@ -20,7 +18,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onNavigate }) => {
   ];
 
   const handleNavigate = (pageId: string) => {
-    onNavigate(pageId);
+    navigate(`/${pageId}`);
     setSidebarOpen(false);
   };
 
@@ -51,7 +49,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onNavigate }) => {
                 <h2 className="text-lg font-semibold text-gray-900">Navigation</h2>
                 <button
                   onClick={() => setSidebarOpen(false)}
-                  className="p-2 rounded-lg hover:bg-gray-100 transition-colors lg:hidden"
+                  className="p-2 rounded-lg hover:bg-gray-100 transition-colors lg:hidden "
                 >
                   <X className="h-5 w-5 text-gray-500" />
                 </button>
@@ -62,7 +60,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onNavigate }) => {
                 <nav className="space-y-2 px-4">
                   {menuItems.map((item) => {
                     const Icon = item.icon;
-                    const isActive = currentPage === item.id;
+                    const isActive = location.pathname === item.id;
                     
                     return (
                       <motion.button
