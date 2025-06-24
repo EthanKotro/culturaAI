@@ -12,12 +12,13 @@ function App() {
     <>
       <Header />
       <div className="w-[100vw] overflow-x-hidden">
-        <Home />
-        <About />
-        <Services />
-        <HowItWorks />
-        <Roles />
-        <Contact />
+        <section id="home"><Home /></section>
+        <section id="about"><About /></section>
+        <section id="services"><Services /></section>
+        <section id="how-it-works"><HowItWorks /></section>
+        <section id="roles"><Roles /></section>
+        <section id="contact"><Contact /></section>
+        <br />
       </div>
     </>
   )
