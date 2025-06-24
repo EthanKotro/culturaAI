@@ -46,12 +46,12 @@ const Contact = () => {
   return (
     <div className='contact-wrapper' id='contact'>
     <div className="contact-container border-b-1 border-b-red-500 bg-[#342603]/90 p-6 flex flex-col text-white justify-start">
-        <div className="flex flex-col p-12">
+        <div className="flex flex-col p-6 md:p-12">
             <h1 className='text-green-500 font-semibold'>Get in touch</h1>
-            <div className='flex'>
-                <div className='flex flex-col w-[50%] space-y-2 p-6'>
-                    <h2 className='font-bold text-4xl text-wrap'>We'd love to hear from you!</h2>
-                    <form className='space-y-4'>
+            <div className='flex max-sm:flex-col'>
+                <div className='flex flex-col w-[50%] space-y-2 p-3 ps-0 md:p-6'>
+                    <h2 className='font-bold text-2xl md:text-4xl text-nowrap'>We'd love to hear from you!</h2>
+                    <form className='md:space-y-4 space-y-2 w-full' onSubmit={handleSubmit}>
                         <label htmlFor="">Name <span className='text-red-500'>*</span></label>
                         <input type="text" placeholder="John Doe" className='p-2 w-full rounded border-1 border-white' />
                         <label htmlFor="">Email address <span className='text-red-500'>*</span></label>
