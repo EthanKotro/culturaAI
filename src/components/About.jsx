@@ -1,21 +1,58 @@
-import React from 'react'
+import React from 'react';
+import { Globe, Heart, Users } from 'lucide-react';
 
 const About = () => {
   return (
-    <div className='about-wrapper' id='about'>
-      <div className="about-container border-b-1 border-b-red-500 bg-[#342603]/90 p-6 flex max-sm:flex-col h-[100vh] text-white justify-around md:items-center">
-          <div className="flex flex-col md:w-[40%] space-y-2">
-            <h1 className='text-green-500 font-semibold'>Embrace your heritage</h1>
-            <h2 className='text-2xl font-bold'>Explore, learn, and connect</h2>
-            <p className='text-wrap'>CulturaAi harnesses the power of artificial intelligence to celebrate and preserve the vibrant tapestry of African culture. With features like our AI Voice Translator, you can effortlessly translate and hear English phrases in native languages like Kikuyu, Swahili, Yoruba, and Zulu. Discover traditional African stories through our Cultural Story Narrator, engage with interactive games in our Game Hub, and share your own narratives on our Community Stories page. Join us in fostering a deeper understanding and appreciation of Africa's rich heritage.</p>
-            <span className='underline'>Get in touch</span>
-          </div>
-          <div>
-            <img src="https://picsum.photos/500/500?grayscale" alt="CulturaAi-About" />
-          </div>
-      </div>
-    </div>
-  )
-}
+    <section id="about" className="py-20 bg-[#342603]/90 text-white">
+      <div className="container mx-auto px-6">
+        
+        {/* Description */}
+        <div className="max-w-4xl mx-auto text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold text-green-500 mb-4">
+            Embrace Your Heritage
+          </h2>
+          <p className="text-lg md:text-xl text-[#F3EDE3]/90 leading-relaxed font-serif">
+            CulturaAI uses the power of artificial intelligence to celebrate and preserve Africa's vibrant culture.
+            Explore various African languages,while engaging with traditional stories, games, and a community that reconnects you to your roots.
+          </p>
+        </div>
 
-export default About
+        {/* Icons */}
+        <div className="grid md:grid-cols-3 gap-10 max-w-5xl mx-auto mb-20">
+          {[{
+            icon: Globe,
+            title: 'Global Access',
+            desc: 'Access African language tools from anywhere in the world.'
+          }, {
+            icon: Heart,
+            title: 'Cultural Love',
+            desc: 'Celebrate and preserve your cultural heritage with passion.'
+          }, {
+            icon: Users,
+            title: 'Community',
+            desc: 'Bridge generations and foster shared language experiences.'
+          }].map(({ icon: Icon, title, desc }, idx) => (
+            <div key={idx} className="flex flex-col items-center text-center px-4">
+              <Icon className="w-16 h-16 text-[#D6B06F] mb-4" />
+              <h3 className="text-xl font-semibold text-[#FFD700] mb-2">{title}</h3>
+              <p className="text-[#F3EDE3]/80 text-base">{desc}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Explore, Learn, Connect */}
+        <div className="text-center max-w-3xl mx-auto">
+          <h3 className="text-2xl md:text-3xl font-bold mb-4 text-green-500">
+            Explore, Learn, and Connect
+          </h3>
+          <p className="text-lg md:text-xl text-[#F3EDE3]/90 leading-relaxed font-serif">
+            With CulturaAI, you’re not just learning a language — you're immersing yourself in traditions,
+            stories, and voices that have shaped generations. Let technology reconnect us with heritage.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default About;

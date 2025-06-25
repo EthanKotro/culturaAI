@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { IoMenuOutline } from 'react-icons/io5';
 
-const sections = ['home', 'about', 'services', 'how-it-works', 'roles', 'contact'];
+const sections = ['home', 'about', 'services', 'roles', 'contact'];
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -42,7 +42,7 @@ const Header = () => {
 
   return (
     <header className="hd-wrapper">
-      <div className="hd-container flex justify-between max-sm:ps-6 md:justify-around items-center h-[80px] fixed w-full top-0 z-50 bg-[#342603] text-white border-b border-red-500">
+      <div className="hd-container flex justify-between max-sm:ps-6 md:justify-around items-center h-[80px] fixed w-full top-0 z-50 bg-[#342603] text-white ">
         <div className="text-3xl font-bold">CULTURAAI</div>
 
         {/* Desktop Nav */}

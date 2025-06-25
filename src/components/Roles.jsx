@@ -1,46 +1,81 @@
 import React from 'react';
+import { Brain, Server, Monitor, Palette, Link, Search } from 'lucide-react';
 
 const Roles = () => {
-  return (
-    <section id="roles" className="rl-wrapper">
-      <div className="rl-container border-b border-red-500 bg-[#342603]/90 p-4 md:p-6">
-        <div className="flex flex-col p-6 md:p-12">
-          <h1 className="text-green-500 font-semibold">Join the movement</h1>
-          <h2 className="font-bold text-2xl md:text-4xl text-white">
-            Contribute to the future of African culture
-          </h2>
+  const teamMembers = [
+    {
+      name: "Ethan Kisang",
+      role: "AI Lead",
+      description: "Share your knowledge and passion for African culture.",
+      icon: <Brain className="w-8 h-8" />,
+    },
+    {
+      name: "Cecil Kioko",
+      role: "Backend Developer",
+      description: "Share your knowledge and passion for African culture.",
+      icon: <Server className="w-8 h-8" />,
+    },
+    {
+      name: "Emmanuel Mwangangi",
+      role: "Frontend Developer",
+      description: "Share your knowledge and passion for African culture.",
+      icon: <Monitor className="w-8 h-8" />,
+    },
+    {
+      name: "Philip Muendo",
+      role: "UI/UX Designer",
+      description: "Share your knowledge and passion for African culture.",
+      icon: <Palette className="w-8 h-8" />,
+    },
+    {
+      name: "Walter Simon",
+      role: "Integrations",
+      description: "Share your knowledge and passion for African culture.",
+      icon: <Link className="w-8 h-8" />,
+    },
+    {
+      name: "Erick Munyaka",
+      role: "Researcher",
+      description: "Share your knowledge and passion for African culture.",
+      icon: <Search className="w-8 h-8" />,
+    }
+  ];
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 w-full p-2 md:p-6 gap-6">
-            {[
-              ['Ethan Kisang', 'AI Lead'],
-              ['Cecil Kioko', 'Backend Dev'],
-              ['Emmanuel Mwangangi', 'Frontend Dev'],
-              ['Philip Muendo', 'UX Designer'],
-              ['Walter Simon', 'Integrations'],
-              ['Erick Munyaka', 'Researcher'],
-            ].map(([name, title], i) => (
-              <div
-                key={i}
-                className="card flex flex-col items-center hover:bg-[#342603]/70 mt-10 rounded-sm hover:scale-110 transition duration-300 p-4"
-              >
-                <div className="w-32 h-32 rounded-full overflow-hidden mb-3">
-                  <img
-                    src={`https://picsum.photos/seed/${i}/200`}
-                    alt={name}
-                    className="w-full h-full object-cover"
-                  />
+  return (
+    <div className='roles-wrapper' id='team'>
+    <section className="py-20 bg-[#342603]/90">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-16">
+          <h2 className="text-green-500 text-xl font-semibold">Join the Movement</h2>
+          <h1 className="text-white text-3xl md:text-5xl font-bold mt-2">
+            Contribute to the future of African culture
+          </h1>
+        </div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {teamMembers.map((member, index) => (
+            <div
+              key={index}
+              className="bg-[#2c1f05] hover:bg-[#3f2e08] rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+            >
+              <div className="text-center">
+                <div className="w-20 h-20 bg-[#4caf50]/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="text-green-400">
+                    {member.icon}
+                  </div>
                 </div>
-                <h1 className="text-lg md:text-xl font-semibold italianno-regular text-center">{name}</h1>
-                <h2 className="text-xl md:text-2xl font-semibold underline text-center">{title}</h2>
-                <p className="text-md md:text-lg mt-2 text-center">
-                  Share your knowledge and passion for African culture.
+                <h3 className="text-xl font-bold text-white">{member.name}</h3>
+                <p className="text-[#f5e9d2] font-semibold mt-1">{member.role}</p>
+                <p className="text-[#e0d6c4] mt-3 text-sm leading-relaxed">
+                  {member.description}
                 </p>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
+    </div>
   );
 };
 

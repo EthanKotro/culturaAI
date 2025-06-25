@@ -1,38 +1,106 @@
-import React from 'react'
+import React, { useState } from 'react';
+import { Languages, BookOpen, Gamepad2 } from 'lucide-react';
+
+const howItWorksItems = [
+  {
+    icon: <Languages className="w-12 h-12 text-[#FFD700]" />,
+    title: "Translator",
+    subtitle: "Speak and get translated instantly",
+    description: "Translate and narrate phrases into native African languages using real-time AI voice tools.",
+    features: ["Real-time audio", "Cultural context", "Multiple languages"]
+  },
+  {
+    icon: <BookOpen className="w-12 h-12 text-[#FFD700]" />,
+    title: "Folktale Explorer",
+    subtitle: "Explore African cultural stories",
+    description: "Dive into traditional tales from Kikuyu, Kamba, and Luo cultures with voice narration and context.",
+    features: ["Narrated stories", "Cultural notes", "Multiple languages"]
+  },
+  {
+    icon: <Gamepad2 className="w-12 h-12 text-[#FFD700]" />,
+    title: "Language Games",
+    subtitle: "Play and learn interactively",
+    description: "Learn vocabulary and grammar through engaging language games designed for African dialects.",
+    features: ["Fun challenges", "Track progress", "Share achievements"]
+  }
+];
 
 const Services = () => {
-  return (
-    <div className='services-wrapper' id='services'>
-      <div className="services-container border-b-1 border-b-red-500 bg-[#342603]/90 p-6 flex md:h-[100vh] flex-col text-white justify-start">
-          <div className="flex flex-col p-6 md:p-12">
-            <h1 className='text-green-500 font-semibold'>Embrace your heritage</h1>
-            <h2 className='font-bold md:text-4xl text-2xl'>Explore, learn, and share african culture</h2>
-            <div className="md:grid md:grid-cols-[1fr_1fr_1fr] flex flex-col w-[100%] justify-start p-6 space-x-4 md:gap-4">
-              <div className="card flex flex-col bg-[#342603]/70 mt-10 h-[100%]">
-                <img src="https://picsum.photos/400/200" alt="CulturaAi-About" />
-                <h1 className='md:text-2xl text-xl font-semibold my-2 p-1'>AI voice translator </h1>
-                <p className='md:text-lg text-md mt-2 mb-4 ms-1'>Translate and narate phrases into native African languages.</p>
-              </div>
-              <div className="card flex flex-col bg-[#342603]/70 mt-10 h-[100%]">
-                <img src="https://picsum.photos/400/200" alt="CulturaAi-About" />
-                <h1 className='text-2xl font-semibold my-2 p-1'>Game Hub</h1>
-                <p className='text-lg mt-2 mb-4 ms-1'>Translate and narate phrases into native African languages.</p>
-              </div>
-              <div className="card flex flex-col bg-[#342603]/70 mt-10 h-[100%]">
-                <img src="https://picsum.photos/400/200" alt="CulturaAi-About" />
-                <h1 className='text-2xl font-semibold my-2 p-1'>Story Narrator</h1>
-                <p className='text-lg mt-2 mb-4 ms-1'>Translate and narate phrases into native African languages.</p>
-              </div>
-              {/* <div className="card flex flex-col bg-[#342603]/70 mt-10 h-[13rem] w-[20rem]">
-                <img src="" alt="" />
-                <h1>AI voice translator </h1>
-                <p>Translate and narate phrases into native African languages.</p>
-              </div> */}
-            </div>
-          </div>
-      </div>
-    </div>
-  )
-}
+  const [flippedIndex, setFlippedIndex] = useState(null);
 
-export default Services
+  const handleFlip = (index) => {
+    // Toggle flip state
+    setFlippedIndex(flippedIndex === index ? null : index);
+  };
+
+  return (
+    <section id="services" className="py-20 bg-gradient-to-b from-[#342603] to-[#1f1504]">
+      <style>{`
+        .perspective-1000 {
+          perspective: 1000px;
+        }
+        .transform-style-preserve-3d {
+          transform-style: preserve-3d;
+        }
+        .backface-hidden {
+          backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+          transform: rotateY(180deg);
+        }
+      `}</style>
+
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-16">
+          <h2 className="text-green-500 font-semibold text-xl">EXPERIENCE AFRICAN CULTURE</h2>
+          <h1 className="text-4xl md:text-5xl font-bold text-white mt-2">
+            Engage with heritage through innovative tools
+          </h1>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-6xl mx-auto">
+          {howItWorksItems.map((item, index) => (
+            <div
+              key={index}
+              className="group perspective-1000 h-96 cursor-pointer"
+              onClick={() => handleFlip(index)}
+            >
+              <div
+                className={`relative w-full h-full transition-transform duration-700 transform-style-preserve-3d ${
+                  flippedIndex === index ? 'rotate-y-180' : ''
+                } group-hover:rotate-y-180`}
+              >
+                {/* Front of card */}
+                <div className="absolute inset-0 w-full h-full backface-hidden bg-[#4B2E2E] rounded-2xl p-6 flex flex-col items-center justify-center text-center shadow-xl">
+                  <div className="mb-4">
+                    {item.icon}
+                  </div>
+                  <h3 className="text-2xl font-bold text-[#FFD700] mb-2">{item.title}</h3>
+                  <p className="text-[#D6B06F] text-lg">{item.subtitle}</p>
+                  <p className="mt-6 text-[#F3EDE3] text-sm opacity-75">Tap or hover to learn more</p>
+                </div>
+
+                {/* Back of card */}
+                <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180 bg-[#6B4C3B] rounded-2xl p-6 shadow-xl overflow-y-auto">
+                  <h3 className="text-xl font-bold text-[#FFD700] mb-2">{item.title}</h3>
+                  <p className="text-[#F3EDE3] mb-4 text-sm leading-relaxed">{item.description}</p>
+                  <h4 className="text-[#D6B06F] font-semibold text-sm mb-2">Key Features:</h4>
+                  <ul className="space-y-1">
+                    {item.features.map((feature, i) => (
+                      <li key={i} className="flex items-start text-sm text-[#F3EDE3]">
+                        <span className="w-2 h-2 mt-1 bg-[#FFD700] rounded-full mr-3"></span>
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Services;

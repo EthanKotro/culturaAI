@@ -3,9 +3,9 @@ import About from './components/About'
 import Contact from './components/Contact'
 import Header from './components/Header'
 import Home from './components/Home'
-import HowItWorks from './components/HowItWorks'
-import Roles from './components/Roles'
 import Services from './components/Services'
+import Roles from './components/Roles'
+
 
 function App() {
   return (
@@ -15,9 +15,8 @@ function App() {
         <section id="home"><Home /></section>
         <section id="about"><About /></section>
         <section id="services"><Services /></section>
-        <section id="how-it-works"><HowItWorks /></section>
         <section id="roles"><Roles /></section>
-        <section id="contact"><Contact /></section>
+        <section id="contact"><Contact/></section>
         <br />
       </div>
     </>
