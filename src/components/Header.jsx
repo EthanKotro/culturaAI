@@ -40,7 +40,7 @@ const Header = () => {
   return (
     <div className='hd-wrapper'>
         <div className="hd-container flex justify-around items-center h-[80px] fixed w-[100vw] bg-[#342603] border-b-1 border-b-red-500 text-white">
-            <div className='text-3xl font-bold'>CULTURAAI</div>
+            <div className='text-3xl font-bold'>CULTURA AI</div>
             <div className='hd-list list-none flex justify-around items-center space-x-8'>
                 <span className="relative inline-block group">
                     <a href='#home' className='active relative z-10 hover:text-green-500'>Home</a>
