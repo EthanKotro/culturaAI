@@ -1,66 +1,82 @@
-import React from 'react'
+import React from 'react';
+import { Brain, Server, Monitor, Palette, Link, Search } from 'lucide-react';
 
 const Roles = () => {
-  return (
-    <div className="rl-wrapper">
-        <div className="rl-container border-b-1 border-b-red-500 bg-[#342603]/90 p-6">
-            <div className="flex flex-col p-12">
-                <h1 className='text-green-500 font-semibold'>Join the movement</h1>
-                <h2 className='font-bold text-4xl text-white'>Contribute to the future of African culture</h2>
-                <div className="grid grid-cols-[1fr_1fr_1fr] w-[100%] justify-start p-6 space-x-4 gap-4">
-                    <div className="card flex flex-col hover:bg-[#342603]/70 mt-10 h-[100%] justify-center rounded-sm hover:scale-110 duration-300">
-                        <div className='h-[60%] flex justify-center pt-1'>
-                            <img src="https://picsum.photos/400/200" alt="CulturaAi-Roles" className='h-full w-[50%] rounded-[50%] bg-transparent' />
-                        </div>
-                        <h1 className='text-xl font-semibold mt-1 flex justify-center italianno-regular'>Ethan Kisang</h1>
-                        <h1 className='text-2xl font-semibold flex justify-center underline'>AI Lead</h1>
-                        <p className='text-lg mt-2 mb-4 ms-1 ps-1'>Share your knowledge and passion for African culture.</p>
-                    </div>
-                    <div className="card flex flex-col hover:bg-[#342603]/70 mt-10 h-[100%] justify-center rounded-sm  hover:scale-110 duration-300">
-                        <div className='h-[60%] flex justify-center pt-1'>
-                            <img src="https://picsum.photos/400/200" alt="CulturaAi-Roles" className='h-full w-[50%] rounded-[50%] bg-transparent' />
-                        </div>
-                        <h1 className='text-xl font-semibold mt-1 flex justify-center italianno-regular'>Cecil Kioko</h1>
-                        <h1 className='text-2xl font-semibold flex justify-center underline'>Backend Dev</h1>
-                        <p className='text-lg mt-2 mb-4 ms-1 ps-1'>Share your knowledge and passion for African culture.</p>
-                    </div>
-                    <div className="card flex flex-col hover:bg-[#342603]/70 mt-10 h-[100%] justify-center rounded-sm  hover:scale-110 duration-300">
-                        <div className='h-[60%] flex justify-center pt-1'>
-                            <img src="https://picsum.photos/400/200" alt="CulturaAi-Roles" className='h-full w-[50%] rounded-[50%] bg-transparent' />
-                        </div>
-                        <h1 className='text-xl font-semibold mt-1 flex justify-center italianno-regular'>Emmanuel Mwangangi</h1>
-                        <h1 className='text-2xl font-semibold flex justify-center underline'>Frontend Dev</h1>
-                        <p className='text-lg mt-2 mb-4 ms-1 ps-1'>Share your knowledge and passion for African culture.</p>
-                    </div>
-                    <div className="card flex flex-col hover:bg-[#342603]/70 mt-10 h-[100%] justify-center rounded-sm  hover:scale-110 duration-300">
-                        <div className='h-[60%] flex justify-center pt-1'>
-                            <img src="https://picsum.photos/400/200" alt="CulturaAi-Roles" className='h-full w-[50%] rounded-[50%] bg-transparent' />
-                        </div>
-                        <h1 className='text-xl font-semibold mt-1 flex justify-center italianno-regular'>Philip Muendo</h1>
-                        <h1 className='text-2xl font-semibold flex justify-center underline'>UX Designer</h1>
-                        <p className='text-lg mt-2 mb-4 ms-1 ps-1'>Share your knowledge and passion for African culture.</p>
-                    </div>
-                    <div className="card flex flex-col hover:bg-[#342603]/70 mt-10 h-[100%] justify-center rounded-sm  hover:scale-110 duration-300">
-                        <div className='h-[60%] flex justify-center pt-1'>
-                            <img src="https://picsum.photos/400/200" alt="CulturaAi-Roles" className='h-full w-[50%] rounded-[50%] bg-transparent' />
-                        </div>
-                        <h1 className='text-xl font-semibold mt-1 flex justify-center italianno-regular'>Walter Simon</h1>
-                        <h1 className='text-2xl font-semibold flex justify-center underline'>Integrations</h1>
-                        <p className='text-lg mt-2 mb-4 ms-1 ps-1'>Share your knowledge and passion for African culture.</p>
-                    </div>
-                    <div className="card flex flex-col hover:bg-[#342603]/70 mt-10 h-[100%] justify-center rounded-sm  hover:scale-110 duration-300">
-                        <div className='h-[60%] flex justify-center pt-1'>
-                            <img src="https://picsum.photos/400/200" alt="CulturaAi-Roles" className='h-full w-[50%] rounded-[50%] bg-transparent' />
-                        </div>
-                        <h1 className='text-xl font-semibold mt-1 flex justify-center italianno-regular'>Erick Munyaka</h1>
-                        <h1 className='text-2xl font-semibold flex justify-center underline'>Researcher</h1>
-                        <p className='text-lg mt-2 mb-4 ms-1 ps-1'>Share your knowledge and passion for African culture.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-  )
-}
+  const teamMembers = [
+    {
+      name: "Ethan Kisang",
+      role: "AI Lead",
+      description: "Share your knowledge and passion for African culture.",
+      icon: <Brain className="w-8 h-8" />,
+    },
+    {
+      name: "Cecil Kioko",
+      role: "Backend Developer",
+      description: "Share your knowledge and passion for African culture.",
+      icon: <Server className="w-8 h-8" />,
+    },
+    {
+      name: "Emmanuel Mwangangi",
+      role: "Frontend Developer",
+      description: "Share your knowledge and passion for African culture.",
+      icon: <Monitor className="w-8 h-8" />,
+    },
+    {
+      name: "Philip Muendo",
+      role: "UI/UX Designer",
+      description: "Share your knowledge and passion for African culture.",
+      icon: <Palette className="w-8 h-8" />,
+    },
+    {
+      name: "Walter Simon",
+      role: "Integrations",
+      description: "Share your knowledge and passion for African culture.",
+      icon: <Link className="w-8 h-8" />,
+    },
+    {
+      name: "Erick Munyaka",
+      role: "Researcher",
+      description: "Share your knowledge and passion for African culture.",
+      icon: <Search className="w-8 h-8" />,
+    }
+  ];
 
-export default Roles
+  return (
+    <div className='roles-wrapper' id='team'>
+    <section className="py-20 bg-[#342603]/90">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-16">
+          <h2 className="text-green-500 text-xl font-semibold">Join the Movement</h2>
+          <h1 className="text-white text-3xl md:text-5xl font-bold mt-2">
+            Contribute to the future of African culture
+          </h1>
+        </div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {teamMembers.map((member, index) => (
+            <div
+              key={index}
+              className="bg-[#2c1f05] hover:bg-[#3f2e08] rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+            >
+              <div className="text-center">
+                <div className="w-20 h-20 bg-[#4caf50]/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="text-green-400">
+                    {member.icon}
+                  </div>
+                </div>
+                <h3 className="text-xl font-bold text-white">{member.name}</h3>
+                <p className="text-[#f5e9d2] font-semibold mt-1">{member.role}</p>
+                <p className="text-[#e0d6c4] mt-3 text-sm leading-relaxed">
+                  {member.description}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+    </div>
+  );
+};
+
+export default Roles;

@@ -1,79 +1,90 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { IoMenuOutline } from 'react-icons/io5';
+
+const sections = ['home', 'about', 'services', 'roles', 'contact'];
 
 const Header = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
 
-    // const [activeSection, setActiveSection] = useState("home");
+  const toggleMenu = () => setMenuOpen(prev => !prev);
 
-    // const sections = ["home", "about", "services", "how-it-works", "news", "blog", "contact"];
+  // Lock scroll when mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : 'auto';
+  }, [menuOpen]);
 
-    // const sectionRefs = {
-    //     home: useRef(null),
-    //     about: useRef(null),
-    //     services: useRef(null),
-    //     howItWorks: useRef(null),
-    //     contact: useRef(null)
-    // };
+  // Track active section in view
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
 
-    // useEffect(() => {
-    //     const obserever = new IntersectionObserver(
-    //         (entries) => {
-    //             entries.forEach((entry) => {
-    //                 if (entry.isIntersecting) {
-    //                     setActiveSection(entry.target.id);
-    //                 }
-    //             });
-    //         },
-    //         {
-    //             threshold: 0.5,
-    //         }
-    //     );
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
 
-    //     sectionRefs.forEach((section) => {
-    //         if (sectionRefs[section].current) {
-    //             obserever.observe(sectionRefs[section].current);
-    //         }
-    //     });
+    return () => observer.disconnect();
+  }, []);
 
-    //     return () => obserever.disconnect();
-    // }, []);
+  const linkClass = id =>
+    `relative z-10 hover:text-green-500 capitalize transition ${
+      activeSection === id ? 'text-green-500 font-bold' : ''
+    }`;
 
   return (
-    <div className='hd-wrapper'>
-        <div className="hd-container flex justify-around items-center h-[80px] fixed w-[100vw] bg-[#342603] border-b-1 border-b-red-500 text-white">
-            <div className='text-3xl font-bold'>CULTURA AI</div>
-            <div className='hd-list list-none flex justify-around items-center space-x-8'>
-                <span className="relative inline-block group">
-                    <a href='#home' className='active relative z-10 hover:text-green-500'>Home</a>
-                    <span className="absolute left-0 bottom-0 w-full h-0.5 bg-green-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-bottom duration-300"></span>
-                </span>
-                <span className="relative inline-block group">
-                    <a href='#about' className='relative z-10 hover:text-green-500'>About</a>
-                    <span className="absolute left-0 bottom-0 w-full h-0.5 bg-green-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-bottom duration-300"></span>
-                </span>
-                <span className="relative inline-block group">
-                    <a href='#services' className='relative z-10 hover:text-green-500'>Services</a>
-                    <span className="absolute left-0 bottom-0 w-full h-0.5 bg-green-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-bottom duration-300"></span>
-                </span>
-                <span className="relative inline-block group">
-                    <a href='#how-it-works' className='relative z-10 hover:text-green-500'>How It Works</a>
-                    <span className="absolute left-0 bottom-0 w-full h-0.5 bg-green-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-bottom duration-300"></span>
-                </span>
-                <span className="relative inline-block group">
-                    <a href='#news' className='relative z-10 hover:text-green-500'>News</a>
-                    <span className="absolute left-0 bottom-0 w-full h-0.5 bg-green-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-bottom duration-300"></span>
-                </span>
-                <span className="relative inline-block group">
-                    <a href='#blog' className='relative z-10 hover:text-green-500'>Blog</a>
-                    <span className="absolute left-0 bottom-0 w-full h-0.5 bg-green-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-bottom duration-300"></span>
-                </span>
-                <span className="relative inline-block group p-2 border-2 border-green-500 rounded-md hover:bg-green-500 hover:text-white transition-colors duration-300">
-                    <a href='#contact' className="relative z-10 font-semibold text-xl">CONTACT</a>
-                </span>
-            </div>
+    <header className="hd-wrapper">
+      <div className="hd-container flex justify-between max-sm:ps-6 md:justify-around items-center h-[80px] fixed w-full top-0 z-50 bg-[#342603] text-white ">
+        <div className="text-3xl font-bold">CULTURAAI</div>
 
+        {/* Desktop Nav */}
+        <nav className="hd-list list-none md:flex justify-around items-center space-x-8 hidden">
+          {sections.map(id => (
+            <span key={id} className="relative inline-block group">
+              <a href={`#${id}`} className={linkClass(id)}>
+                {id.replace('-', ' ')}
+              </a>
+              <span className="absolute left-0 bottom-0 w-full h-0.5 bg-green-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-bottom duration-300"></span>
+            </span>
+          ))}
+        </nav>
+
+        {/* Hamburger Button */}
+        <div className="md:hidden pe-4">
+          <button onClick={toggleMenu} className="text-white text-3xl focus:outline-none">
+            <IoMenuOutline size={35} />
+          </button>
         </div>
-    </div>
-  )
-}
+      </div>
 
-export default Header
+      {/* Mobile Menu */}
+      {menuOpen && (
+        <div className="hd-mobile-menu fixed inset-0 bg-[#342603]/95 flex flex-col items-center justify-center z-40 transition-all duration-300">
+          <ul className="list-none space-y-6 text-white text-2xl text-center">
+            {sections.map(id => (
+              <li key={id}>
+                <a
+                  href={`#${id}`}
+                  onClick={toggleMenu}
+                  className={`${linkClass(id)} hover:text-green-400`}
+                >
+                  {id.replace('-', ' ')}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </header>
+  );
+};
+
+export default Header;

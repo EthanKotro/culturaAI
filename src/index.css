@@ -1,5 +1,22 @@
 @import "tailwindcss";
+@import "aos/dist/aos.css";
+
 
 html {
     scroll-behavior: smooth;
+}
+
+[id]::before {
+  content: '';
+  display: block;
+  height: 80px;
+  margin-top: -80px;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
