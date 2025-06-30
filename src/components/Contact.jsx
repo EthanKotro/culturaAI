@@ -104,7 +104,7 @@ const Contact = () => {
           </div>
 
           {/* Messages Display */}
-          <div className="mt-10 bg-[#2c2002] p-4 rounded w-full">
+{/*           <div className="mt-10 bg-[#2c2002] p-4 rounded w-full">
             {Array.isArray(message) && message.length > 0 ? (
               message.map((msg, index) => (
                 <div key={msg.id || index} className="mb-4 border-b border-white/20 pb-2">
@@ -117,7 +117,7 @@ const Contact = () => {
             ) : (
               <p className="text-lg">{message}</p>
             )}
-          </div>
+          </div> */}
         </div>
       </div>
     </section>
