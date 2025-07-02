@@ -2,11 +2,11 @@
 
 ## Project Overview
 
-This project aims to [Add a descriptive project overview here. Since no description was provided, provide a general purpose for a AI cultural related project. For example: provide a platform for cultural exchange and preservation through AI-powered tools]. It leverages Python, various frameworks, and Docker for development and deployment.
+This project aims to provide a platform for cultural preservation in the digital space through AI-powered tools. It leverages Python, Django Rest frameworks, and Docker for development and deployment.
 
 ## Key Features & Benefits
 
-*   **AI Model Integration:** Utilizes AI models for [Specify AI functionalities, e.g., content generation, translation, analysis].
+*   **AI Model Integration:** Utilizes AI models for content generation, translation and narrayion.
 *   **User Authentication:** Secure authentication via Firebase.
 *   **API Endpoints:** Provides RESTful APIs for accessing [Specify API functionalities].
 *   **Dockerized Deployment:** Simplified deployment with Docker.
