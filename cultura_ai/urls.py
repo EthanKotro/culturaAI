@@ -13,7 +13,7 @@ router = DefaultRouter()
 urlpatterns = [
     # Admin
     path('admin/', admin.site.urls),
-
+    path("", include("apps.translations.urls")),
     # API endpoints
     path('api/v1/', include([
         path('auth/', include('apps.authentication.urls')),
