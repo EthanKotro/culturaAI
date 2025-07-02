@@ -8,7 +8,7 @@ export const TranslationHub: React.FC = () => {
   const [sourceText, setSourceText] = useState('');
   const [translatedText, setTranslatedText] = useState('');
   const [sourceLang, setSourceLang] = useState('en');
-  const [targetLang, setTargetLang] = useState('ki');
+  const [targetLang, setTargetLang] = useState('sw');
   const [isListening, setIsListening] = useState(false);
 
   const handleTranslate = async () => {
@@ -17,7 +17,7 @@ export const TranslationHub: React.FC = () => {
     setIsTranslating(true);
     
     try {
-      const response = await fetch('http://localhost:8000/api/v1/translate', {
+      const response = await fetch('http://localhost:8000/api/v1/translations/translate/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -29,28 +29,34 @@ export const TranslationHub: React.FC = () => {
         }),
       });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error||'Translation service error');
+      const data = await response.json();
+      
+      if (!data.translated_text) {
+        console.error('Backend response:', data);
+        throw new Error(`Translation failed: ${data.error || 'No translated text received'}`);
       }
 
-      const data = await response.json();
-      const translated = data[0]?.translation_text || 'Translation failed';
-      setTranslatedText(translated);
+      setTranslatedText(data.translated_text);
 
       const newTranslation = {
-        id: Date.now().toString(),
-        sourceText,
-        translatedText: translated,
-        sourceLang,
-        targetLang,
-        timestamp: new Date()
+        id: data.id.toString(),
+        sourceText: data.source_text,
+        translatedText: data.translated_text,
+        sourceLang: data.source_language,
+        targetLang: data.target_language,
+        timestamp: new Date(data.created_at),
+        modelUsed: data.model_used,
+        confidenceScore: data.confidence_score,
+        processingTime: data.processing_time,
+        userRating: data.user_rating,
+        isFavorite: data.is_favorite
       };
 
       addTranslation(newTranslation);
     } catch (error) {
       console.error('Translation error:', error);
       setTranslatedText('Translation service error');
+      
     } finally {
       setIsTranslating(false);
     }
