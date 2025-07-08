@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { StoryDetail } from './StoryDetail';
 
 export const StoryExplorer: React.FC = () => {
-  const { availableLanguages, setStories, stories, setCurrentStory } = useAppStore();
+  const { availableLanguages, setStories, stories } = useAppStore();
   const [selectedLanguage, setSelectedLanguage] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
@@ -28,8 +28,8 @@ export const StoryExplorer: React.FC = () => {
       } catch (error) {
         console.error('Error fetching stories:', error);
       }
-        };
-      fetchStories();
+    };
+    fetchStories();
   }, [setStories]);
 
   const categories = ['all', 'wisdom', 'heroic', 'origin', 'romance', 'humor'];
@@ -37,8 +37,8 @@ export const StoryExplorer: React.FC = () => {
 
   const filteredStories = stories.filter(story => {
     return (selectedLanguage === 'all' || story.language === selectedLanguage) &&
-           (selectedCategory === 'all' || story.category === selectedCategory) &&
-           (selectedDifficulty === 'all' || story.difficulty === selectedDifficulty);
+      (selectedCategory === 'all' || story.category === selectedCategory) &&
+      (selectedDifficulty === 'all' || story.difficulty === selectedDifficulty);
   });
 
   const toggleAudio = (storyId: string) => {
@@ -70,7 +70,7 @@ export const StoryExplorer: React.FC = () => {
       default: return '📖';
     }
   };
-   if (selectedStory) {
+  if (selectedStory) {
     const storyLang = availableLanguages.find(lang => lang.code === selectedStory.language);
     return (
       <StoryDetail
@@ -79,12 +79,12 @@ export const StoryExplorer: React.FC = () => {
         storyLang={storyLang}
       />
     );
-  } 
+  }
 
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-8">
       {/* Header */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="text-center space-y-4"
@@ -96,7 +96,7 @@ export const StoryExplorer: React.FC = () => {
       </motion.div>
 
       {/* Filters */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
@@ -106,7 +106,7 @@ export const StoryExplorer: React.FC = () => {
           <Filter className="h-5 w-5 text-gray-600" />
           <h3 className="text-lg font-semibold text-gray-900">Filter Stories</h3>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Language Filter */}
           <div>
@@ -164,7 +164,7 @@ export const StoryExplorer: React.FC = () => {
         {filteredStories.map((story, index) => {
           const storyLang = availableLanguages.find(lang => lang.code === story.language);
           const isCurrentlyPlaying = currentAudio === story.id && isPlaying;
-          
+
           return (
             <motion.div
               key={story.id}
@@ -192,7 +192,7 @@ export const StoryExplorer: React.FC = () => {
                       {story.title}
                     </h3>
                   </div>
-                  
+
                   <motion.button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -200,11 +200,10 @@ export const StoryExplorer: React.FC = () => {
                     }}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
-                    className={`p-2 rounded-full transition-colors ${
-                      isCurrentlyPlaying 
-                        ? 'bg-primary-500 text-white' 
+                    className={`p-2 rounded-full transition-colors ${isCurrentlyPlaying
+                        ? 'bg-primary-500 text-white'
                         : 'bg-white text-primary-600 hover:bg-primary-50'
-                    }`}
+                      }`}
                   >
                     {isCurrentlyPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
                   </motion.button>
@@ -249,7 +248,7 @@ export const StoryExplorer: React.FC = () => {
 
       {/* Empty State */}
       {filteredStories.length === 0 && (
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           className="text-center py-12"

@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 export const Header: React.FC = () => {
   const { setSidebarOpen, sidebarOpen, currentLanguage, availableLanguages, setCurrentLanguage, user, isGuest } = useAppStore();
 
-  const currentLang = availableLanguages.find(lang => lang.code === currentLanguage);
+  // const currentLang = availableLanguages.find(lang => lang.code === currentLanguage);
 
   return (
     <motion.header 

@@ -5,11 +5,11 @@ import { motion } from 'framer-motion'
 import { Layout } from './components/Layout/Layout'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [] = useState(0)
 
   return (
     <Router>
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
