@@ -1,6 +1,5 @@
 models
 __pycache__
-gradio_interface.py
 list_langs.py
 tts_app.py
 save_dataset.ipynb
