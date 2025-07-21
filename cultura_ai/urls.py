@@ -16,12 +16,9 @@ urlpatterns = [
     path("", include("apps.translations.urls")),
     # API endpoints
     path('api/v1/', include([
-        path('auth/', include('apps.authentication.urls')),
         path('translations/', include('apps.translations.urls')),
         path('stories/', include('apps.stories.urls')),
         path('games/', include('apps.games.urls')),
-        path('analytics/', include('apps.analytics.urls')),
-        path('ai/', include('apps.ai_models.urls')),
     ])),
     
     # API Root

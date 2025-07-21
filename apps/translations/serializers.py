@@ -9,12 +9,12 @@ class TranslationSerializer(serializers.ModelSerializer):
         model = Translation
         fields = [
             'id', 'source_text', 'translated_text', 'source_language',
-            'target_language', 'model_used', 'confidence_score',
-            'created_at', 'processing_time', 'user_rating', 'is_favorite'
+            'target_language', 
+            'created_at', 
         ]
         read_only_fields = [
-            'id', 'translated_text', 'model_used', 'confidence_score',
-            'created_at', 'processing_time'
+            'id', 'translated_text',
+            'created_at'
         ]
 
 

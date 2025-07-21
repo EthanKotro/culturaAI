@@ -5,15 +5,14 @@ Django settings for Cultura AI project.
 import os
 from pathlib import Path
 from decouple import config
-import firebase_admin
-from firebase_admin import credentials
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-cultura-ai-dev-key-change-in-production')
-HUGGINGFACE_API_KEY = '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'
+# HUGGINGFACE_API_KEY = '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'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
@@ -30,6 +29,7 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
+    
     'rest_framework',
     'corsheaders',
     'django_celery_beat',
@@ -37,12 +37,9 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    'apps.authentication',
     'apps.translations',
     'apps.stories',
     'apps.games',
-    'apps.analytics',
-    'apps.ai_models',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -82,17 +79,9 @@ WSGI_APPLICATION = 'cultura_ai.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / "db.sqlite3",
-        # 'ENGINE': 'django.db.backends.postgresql',
-        # 'NAME': config('DB_NAME', default='cultura_ai'),
-        # 'USER': config('DB_USER', default='postgres'),
-        # 'PASSWORD': config('DB_PASSWORD', default=''),
-        # 'HOST': config('DB_HOST', default='localhost'),
-        # 'PORT': config('DB_PORT', default='5432'),
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-AUTH_USER_MODEL = 'authentication.User'
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -132,9 +121,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # REST Framework configuration
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'apps.authentication.authentication.FirebaseAuthentication',
-    ],
+
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
@@ -151,32 +138,14 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+    "http://127.0.0.1:4173",
+    "http://localhost:4173",
+
 ]
 
 CORS_ALLOW_CREDENTIALS = True
 
-# Firebase configuration
-FIREBASE_ADMIN_CREDENTIALS = os.path.join(BASE_DIR, 'firebase-adminsdk.json')
 
-# Firebase configuration
-FIREBASE_CONFIG = {
-    'type': 'service_account',
-    'project_id': 'culturatranslator-a',
-    'auth_domain': 'culturatranslator-a.firebaseapp.com',
-    'database_url': 'https://culturatranslator-a.firebaseio.com',
-    'storage_bucket': 'culturatranslator-a.appspot.com',
-    'messaging_sender_id': '825829097763',
-    'app_id': '1:825829097763:web:d7f29544c8c9d506b54c96',
-    'measurement_id': 'G-07GD4G4ER0'
-}
-
-# Initialize Firebase Admin SDK
-if not firebase_admin._apps:
-    try:
-        cred = credentials.Certificate(FIREBASE_ADMIN_CREDENTIALS)
-        firebase_admin.initialize_app(cred)
-    except Exception as e:
-        print(f"Firebase initialization error: {e}")
 
 # Celery Configuration
 CELERY_BROKER_URL = config('REDIS_URL', default='redis://localhost:6379/0')
@@ -186,23 +155,27 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
 
+import os
+
+TRANSLATOR_URL = os.getenv("TRANSLATOR_URL", "http://localhost:8001/translate/")
+
 # AI Models Configuration
-AI_MODELS = {
-    'TRANSLATION': {
-        'MODEL_NAME': 'facebook/nllb-200-distilled-600M',
-        'CACHE_DIR': BASE_DIR / 'ai_cache' / 'translation',
-        'MAX_LENGTH': 512,
-    },
-    'TTS': {
-        'MODEL_NAME': 'tts_models/multilingual/multi-dataset/xtts_v2',
-        'CACHE_DIR': BASE_DIR / 'ai_cache' / 'tts',
-        'SAMPLE_RATE': 22050,
-    },
-    'ASR': {
-        'MODEL_NAME': 'openai/whisper-base',
-        'CACHE_DIR': BASE_DIR / 'ai_cache' / 'asr',
-    }
-}
+# AI_MODELS = {
+#     'TRANSLATION': {
+#         'MODEL_NAME': 'facebook/nllb-200-distilled-600M',
+#         'CACHE_DIR': BASE_DIR / 'ai_cache' / 'translation',
+#         'MAX_LENGTH': 512,
+#     },
+#     'TTS': {
+#         'MODEL_NAME': 'tts_models/multilingual/multi-dataset/xtts_v2',
+#         'CACHE_DIR': BASE_DIR / 'ai_cache' / 'tts',
+#         'SAMPLE_RATE': 22050,
+#     },
+#     'ASR': {
+#         'MODEL_NAME': 'openai/whisper-base',
+#         'CACHE_DIR': BASE_DIR / 'ai_cache' / 'asr',
+#     }
+# }
 
 # Language Configuration
 SUPPORTED_LANGUAGES = {

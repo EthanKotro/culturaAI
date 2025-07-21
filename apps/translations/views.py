@@ -9,31 +9,6 @@ from .serializers import (
     TranslationHistorySerializer
 )
 import hashlib
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
-
-# Load NLLB model and tokenizer locally
-HF_MODEL = "facebook/nllb-200-distilled-600M"
-model = AutoModelForSeq2SeqLM.from_pretrained(HF_MODEL)
-tokenizer = AutoTokenizer.from_pretrained(HF_MODEL)
-translator = pipeline("translation", model=model, tokenizer=tokenizer)
-
-# Map ISO-639-1 codes to NLLB language codes
-LANGUAGE_MAP = {
-    'en': 'eng_Latn',  # English
-    'es': 'spa_Latn',  # Spanish
-    'fr': 'fra_Latn',  # French
-    'de': 'deu_Latn',  # German
-    'it': 'ita_Latn',  # Italian
-    'pt': 'por_Latn',  # Portuguese
-    'nl': 'nld_Latn',  # Dutch
-    'sv': 'swe_Latn',  # Swedish
-    'da': 'dan_Latn',  # Danish
-    'no': 'nob_Latn',  # Norwegian Bokmål
-    'sw': 'swh_Latn',  # Swahili
-    # Add more as needed
-}
-
-
 
 class TranslationListView(generics.ListAPIView):
     serializer_class = TranslationHistorySerializer
@@ -57,17 +32,17 @@ class TranslationDetailView(generics.RetrieveUpdateAPIView):
         return Translation.objects.filter(guest_session=guest_session) if guest_session else Translation.objects.none()
 
 
+import requests
+
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
 def translate_text(request):
-    """Translate text between supported languages using NLLB model"""
     serializer = TranslationRequestSerializer(data=request.data)
     if serializer.is_valid():
         source_text = serializer.validated_data['source_text']
         source_lang = serializer.validated_data['source_language']
         target_lang = serializer.validated_data['target_language']
 
-        # Check if translation exists in cache
         cache_key = f"{source_lang}_{target_lang}_{hashlib.md5(source_text.encode()).hexdigest()}"
         cached_translation = TranslationCache.objects.filter(source_text_hash=cache_key).first()
 
@@ -81,22 +56,22 @@ def translate_text(request):
             )
             return Response(TranslationSerializer(translation).data, status=status.HTTP_200_OK)
 
-        # Get language codes for NLLB
-        source_code = LANGUAGE_MAP.get(source_lang)
-        target_code = LANGUAGE_MAP.get(target_lang)
-
-        if not source_code or not target_code:
-            return Response({"error": "Unsupported language pair"}, status=status.HTTP_400_BAD_REQUEST)
-
+        # Use the translator microservice
         try:
-            # Translate using NLLB pipeline
-            translated_text = translator(
-                source_text,
-                src_lang=source_code,
-                tgt_lang=target_code
-            )[0]['translation_text']
+            ai_response = requests.post(
+                settings.TRANSLATOR_URL,  # e.g. http://translator:8001/translate/
+                json={
+                    "source_text": source_text,
+                    "source_language": source_lang,
+                    "target_language": target_lang,
+                },
+                timeout=30
+            )
+            if ai_response.status_code != 200:
+                return Response({"error": "Translation service failed."}, status=ai_response.status_code)
 
-            # Create translation and cache entry
+            translated_text = ai_response.json().get("translated_text")
+            print(f"Translated text: {translated_text}")
             translation = Translation.objects.create(
                 source_text=source_text,
                 translated_text=translated_text,
@@ -112,8 +87,10 @@ def translate_text(request):
             )
 
             return Response(TranslationSerializer(translation).data, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        except requests.exceptions.RequestException as e:
+            return Response({"error": str(e)}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

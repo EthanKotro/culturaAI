@@ -4,7 +4,6 @@ from django.utils import timezone
 
 User = get_user_model()
 
-
 class Translation(models.Model):
     """Translation model to store translation requests and results"""
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
