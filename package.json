@@ -1,5 +1,4 @@
 {
-  "homepage": "https://ethankotro.github.io/culturaAI",
   "name": "frontend",
   "private": true,
   "version": "1.0.0",
@@ -10,7 +9,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview --host 0.0.0.0 --port 3000"
   },
   "dependencies": {
     "framer-motion": "^12.18.1",

@@ -79,6 +79,11 @@ export const useAppStore = create<AppState>((set) => ({
     { code: 'luo', name: 'Luo', nativeName: 'Dholuo', flag: '🇰🇪' },
     { code: 'kam', name: 'Kamba', nativeName: 'Kikamba', flag: '🇰🇪' },
     { code: 'sw', name: 'Swahili', nativeName: 'Kiswahili', flag: '🇰🇪' },
+    { code: 'fr', name: 'French', nativeName: 'Français', flag: '🇫🇷'},
+    { code: 'es', name: 'Spanish', nativeName: 'Español', flag: '🇪🇸' },
+    { code: 'de', name: 'German', nativeName: 'Deutsch', flag: '🇩🇪' },
+    { code: 'it', name: 'Italian', nativeName: 'Italiano', flag: '🇮🇹' },
+
   ],
   translations: [],
   isTranslating: false,

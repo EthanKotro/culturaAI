@@ -21,10 +21,10 @@ export const StoryExplorer: React.FC = () => {
           throw new Error(`Network HTTP error! status: ${response.status}`);
         }
         const stories = await response.json();
-        if (!Array.isArray(stories.results)) {
+        if (!Array.isArray(stories)) {
           throw new Error('Unexpected response format. Expected an array of stories.');
         }
-        setStories(stories.results);
+        setStories(stories);
       } catch (error) {
         console.error('Error fetching stories:', error);
       }

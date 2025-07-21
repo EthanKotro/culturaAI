@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import { ArrowLeft, Heart, Eye, Star } from 'lucide-react';
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { ArrowLeft, Heart, Eye, Star } from "lucide-react";
 
 interface StoryDetailProps {
   story: any;
@@ -10,25 +10,39 @@ interface StoryDetailProps {
 
 const getDifficultyColor = (difficulty: string) => {
   switch (difficulty) {
-    case 'beginner': return 'bg-green-100 text-green-800';
-    case 'intermediate': return 'bg-yellow-100 text-yellow-800';
-    case 'advanced': return 'bg-red-100 text-red-800';
-    default: return 'bg-gray-100 text-gray-800';
+    case "beginner":
+      return "bg-green-100 text-green-800";
+    case "intermediate":
+      return "bg-yellow-100 text-yellow-800";
+    case "advanced":
+      return "bg-red-100 text-red-800";
+    default:
+      return "bg-gray-100 text-gray-800";
   }
 };
 
 const getCategoryIcon = (category: string) => {
   switch (category) {
-    case 'wisdom': return '🦉';
-    case 'heroic': return '⚔️';
-    case 'origin': return '🌱';
-    case 'romance': return '💕';
-    case 'humor': return '😄';
-    default: return '📖';
+    case "wisdom":
+      return "🦉";
+    case "heroic":
+      return "⚔️";
+    case "origin":
+      return "🌱";
+    case "romance":
+      return "💕";
+    case "humor":
+      return "😄";
+    default:
+      return "📖";
   }
 };
 
-export const StoryDetail: React.FC<StoryDetailProps> = ({ story, onBack, storyLang }) => {
+export const StoryDetail: React.FC<StoryDetailProps> = ({
+  story,
+  onBack,
+  storyLang,
+}) => {
   const [fullStory, setFullStory] = useState<any>(story);
   const [loading, setLoading] = useState(false);
 
@@ -36,8 +50,10 @@ export const StoryDetail: React.FC<StoryDetailProps> = ({ story, onBack, storyLa
     const fetchFullStory = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/v1/stories/${story.id}/`);
-        if (!response.ok) throw new Error('Failed to fetch story');
+        const response = await fetch(
+          `http://127.0.0.1:8000/api/v1/stories/${story.id}/`
+        );
+        if (!response.ok) throw new Error("Failed to fetch story");
         const data = await response.json();
         setFullStory(data);
       } catch (e) {
@@ -51,25 +67,49 @@ export const StoryDetail: React.FC<StoryDetailProps> = ({ story, onBack, storyLa
   }, [story]);
 
   if (!story) return null;
+  const handleLike = async () => {
+  const likedKey = `liked-story-${story.id}`;
+  if (localStorage.getItem(likedKey)) return;
 
+  try {
+    const response = await fetch(`http://127.0.0.1:8000/api/v1/stories/${story.id}/interact/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'},
+      body: JSON.stringify({ interaction_type: 'like' })
+
+    });
+    const data = await response.json();
+    setFullStory({ ...fullStory, likes: data.likes });
+    localStorage.setItem(likedKey, 'true');
+  } catch (err) {
+    console.error("Failed to like the story", err);
+  }
+};
   return (
     <div className="max-w-3xl mx-auto p-6">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden"
-      >
+        className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
         {/* Header */}
         <div className="bg-gradient-to-r from-primary-50 to-accent-50 p-4 flex items-center justify-between">
-          <button onClick={onBack} className="flex items-center text-primary-600 hover:underline">
+          <button
+            onClick={onBack}
+            className="flex items-center text-primary-600 hover:underline">
             <ArrowLeft className="h-5 w-5 mr-1" /> Back
           </button>
           <div className="flex items-center space-x-2">
-            <span className="text-lg">{getCategoryIcon(fullStory.category)}</span>
+            <span className="text-lg">
+              {getCategoryIcon(fullStory.category)}
+            </span>
             <span className="text-sm font-medium text-gray-600">
               {storyLang?.flag} {storyLang?.name}
             </span>
-            <span className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(fullStory.difficulty)}`}>
+            <span
+              className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(
+                fullStory.difficulty
+              )}`}>
               {fullStory.difficulty}
             </span>
           </div>
@@ -77,7 +117,9 @@ export const StoryDetail: React.FC<StoryDetailProps> = ({ story, onBack, storyLa
 
         {/* Title */}
         <div className="p-6 pb-2">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">{fullStory.title}</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">
+            {fullStory.title}
+          </h2>
           <p className="text-gray-600 mb-4">{fullStory.summary}</p>
         </div>
 
@@ -85,17 +127,29 @@ export const StoryDetail: React.FC<StoryDetailProps> = ({ story, onBack, storyLa
         <div className="px-6 pb-6">
           <div className="prose max-w-none text-gray-800 mb-6">
             {loading ? (
-              <span>Loading story...</span>
+              <div className="text-center text-gray-400">Loading story...</div>
             ) : (
               fullStory.content
             )}
+            {/* {loading ? (
+              <span>Loading story...</span>
+            ) : (
+              fullStory.content
+            )} */}
           </div>
           {/* Stats */}
           <div className="flex items-center justify-between text-sm text-gray-500">
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-1">
-                <Heart className="h-4 w-4" />
-                <span>{fullStory.likes}</span>
+<button
+  onClick={handleLike}
+  className="flex items-center space-x-1 text-red-600 hover:text-red-800"
+  title="Like this story"
+>
+  <Heart className="h-4 w-4" />
+  <span>{fullStory.likes}</span>
+</button>
+
               </div>
               <div className="flex items-center space-x-1">
                 <Eye className="h-4 w-4" />
@@ -111,7 +165,9 @@ export const StoryDetail: React.FC<StoryDetailProps> = ({ story, onBack, storyLa
         {/* Category Badge */}
         <div className="px-6 pb-6">
           <span className="inline-block bg-gray-100 text-gray-800 text-xs font-medium px-2 py-1 rounded-full">
-            {fullStory.category?.charAt(0).toUpperCase() + fullStory.category?.slice(1)} Tale
+            {fullStory.category?.charAt(0).toUpperCase() +
+              fullStory.category?.slice(1)}{" "}
+            Tale
           </span>
         </div>
       </motion.div>
