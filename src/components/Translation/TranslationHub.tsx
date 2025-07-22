@@ -14,6 +14,12 @@ export const TranslationHub: React.FC = () => {
   const handleTranslate = async () => {
     if (!sourceText.trim()) return;
     
+    // If source and target languages are the same, just copy the text
+    if (sourceLang === targetLang) {
+      setTranslatedText(sourceText);
+      return;
+    }
+    
     setIsTranslating(true);
     
     try {
@@ -117,7 +123,10 @@ export const TranslationHub: React.FC = () => {
             <div className="flex items-center space-x-3">
               <select
                 value={sourceLang}
-                onChange={(e) => setSourceLang(e.target.value)}
+                onChange={(e) => {
+                  setSourceLang(e.target.value);
+                  setTranslatedText('');
+                }}
                 className="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary-500"
               >
                 {availableLanguages.map(lang => (
@@ -146,7 +155,10 @@ export const TranslationHub: React.FC = () => {
               </span>
               <select
                 value={targetLang}
-                onChange={(e) => setTargetLang(e.target.value)}
+                onChange={(e) => {
+                  setTargetLang(e.target.value);
+                  setTranslatedText('');
+                }}
                 className="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary-500"
               >
                 {availableLanguages.map(lang => (

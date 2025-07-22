@@ -20,7 +20,8 @@ export const StoryExplorer: React.FC = () => {
         if (!response.ok) {
           throw new Error(`Network HTTP error! status: ${response.status}`);
         }
-        const stories = await response.json();
+        const stories_page = await response.json();
+        const stories = stories_page.results;
         if (!Array.isArray(stories)) {
           throw new Error('Unexpected response format. Expected an array of stories.');
         }
