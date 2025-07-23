@@ -235,17 +235,22 @@ export const TranslationHub: React.FC = () => {
               </h3>
             </div>
             
-            <div className="w-full h-40 p-4 bg-gray-50 border border-gray-200 rounded-lg flex items-start">
+            <div className="relative w-full h-40">
               {isTranslating ? (
-                <div className="flex items-center space-x-2 text-primary-600">
-                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-primary-600 border-t-transparent"></div>
-                  <span className="text-sm">Translating...</span>
+                <div className="absolute inset-0 flex items-center justify-center bg-gray-50/50 rounded-lg">
+                  <div className="flex items-center space-x-2 text-primary-600">
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-primary-600 border-t-transparent"></div>
+                    <span className="text-sm">Translating...</span>
+                  </div>
                 </div>
-              ) : translatedText ? (
-                <p className="text-gray-900 whitespace-pre-wrap">{translatedText}</p>
-              ) : (
-                <p className="text-gray-400 text-sm">Translation will appear here...</p>
-              )}
+              ) : null}
+              
+              <textarea
+                value={translatedText}
+                readOnly
+                placeholder="Translation will appear here..."
+                className="w-full h-full p-4 bg-gray-50 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent whitespace-pre-wrap"
+              />
             </div>
 
             <div className="flex items-center justify-between">
