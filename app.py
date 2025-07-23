@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, pipeline
 import os
+import time
 
 # Define request model
 class TranslationRequest(BaseModel):
@@ -44,11 +45,23 @@ async def translate(request: TranslationRequest):
     if not src or not tgt:
         return {"error": "Unsupported language pair"}
 
+    print(f"\nStarting translation from {request.source_language} to {request.target_language}")
+    print(f"Source text: {request.source_text}")
+    
+    start_time = time.time()
+    print("Translating...")
     translated_text = translator(
         request.source_text,
         src_lang=src,
         tgt_lang=tgt
     )[0]["translation_text"]
     
+    end_time = time.time()
+    translation_time = end_time - start_time
+    
+    print(f"Translation complete!")
     print(f"Translated text: {translated_text}")
-    return {"translated_text": translated_text}
+    print(f"Translation time: {translation_time:.2f} seconds")
+    print("-" * 50)  # Separator line
+    
+    return {"translated_text": translated_text, "translation_time": translation_time}
