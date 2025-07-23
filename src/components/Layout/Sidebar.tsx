@@ -41,9 +41,9 @@ export const Sidebar: React.FC = () => {
             animate={{ x: 0 }}
             exit={{ x: -320 }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed left-0 top-0 bottom-0 w-80 bg-white shadow-2xl z-50 lg:relative lg:translate-x-0 lg:shadow-lg"
+            className="fixed top-20 bottom-0 left-0 w-80 bg-white shadow-2xl z-50 lg:fixed lg:translate-x-0 lg:shadow-lg"
           >
-            <div className="flex flex-col h-full">
+            <div className="flex flex-col h-full overflow-y-auto custom-scrollbar">
               {/* Header */}
               <div className="flex items-center justify-between p-4 border-b border-gray-200">
                 <h2 className="text-lg font-semibold text-gray-900">Navigation</h2>

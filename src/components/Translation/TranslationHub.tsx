@@ -199,7 +199,7 @@ export const TranslationHub: React.FC = () => {
               value={sourceText}
               onChange={(e) => setSourceText(e.target.value)}
               placeholder={`Type your text in ${sourceLangObj?.name}...`}
-              className="w-full h-40 p-4 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-full h-64 p-4 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             />
 
             <div className="flex items-center justify-between">
@@ -235,7 +235,7 @@ export const TranslationHub: React.FC = () => {
               </h3>
             </div>
             
-            <div className="relative w-full h-40">
+            <div className="relative w-full h-64">
               {isTranslating ? (
                 <div className="absolute inset-0 flex items-center justify-center bg-gray-50/50 rounded-lg">
                   <div className="flex items-center space-x-2 text-primary-600">
@@ -249,7 +249,9 @@ export const TranslationHub: React.FC = () => {
                 value={translatedText}
                 readOnly
                 placeholder="Translation will appear here..."
-                className="w-full h-full p-4 bg-gray-50 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent whitespace-pre-wrap"
+                className={`w-full h-full p-4 bg-gray-50 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent whitespace-pre-wrap ${
+                  isTranslating ? 'opacity-0 pointer-events-none' : 'opacity-100'
+                }`}
               />
             </div>
 
