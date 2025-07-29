@@ -93,27 +93,24 @@ export const Layout: React.FC = () => {
           <Route path="/" element={<LandingPage />} />
         </Routes>
       ) : (
-        sidebarOpen ? (
-          <div className="grid grid-cols-[320px_1fr] transition-all duration-300">
-            {/* Sidebar */}
-            <div className="bg-white shadow-lg">
+        <>
+          {/* Sidebar (overlay mode) */}
+          {sidebarOpen && (
+            <div className="fixed top-20 left-0 w-80 h-[calc(100vh-5rem)] bg-white shadow-lg z-50 transition-transform duration-300">
               <Sidebar />
             </div>
-            {/* Main Content */}
-            <main className="overflow-hidden max-w-full px-4 sm:px-6 lg:px-8">
-              <Routes>
-                <Route path="/translation" element={<TranslationHub />} />
-                <Route path="/stories" element={<StoryExplorer />} />
-                <Route path="/games" element={<GameHub />} />
-                <Route path="/profile" element={<ProfilePage />} />
-                <Route path="/settings" element={<SettingsPage />} />
-                <Route path="/help" element={<div>Help Page</div>} />
-                <Route path="*" element={<Navigate to="/translation" replace />} />
-              </Routes>
-            </main>
-          </div>
-        ) : (
-          <main className="overflow-hidden max-w-full px-4 sm:px-6 lg:px-8">
+          )}
+
+          {/* Optional overlay background */}
+          {sidebarOpen && (
+            <div
+              className="fixed top-20 left-0 right-0 bottom-0 bg-black bg-opacity-30 z-40"
+              onClick={() => useAppStore.getState().setSidebarOpen(false)}
+            />
+          )}
+
+          {/* Main content (not shifted) */}
+          <main className="relative z-10 px-4 sm:px-6 lg:px-8">
             <Routes>
               <Route path="/translation" element={<TranslationHub />} />
               <Route path="/stories" element={<StoryExplorer />} />
@@ -124,7 +121,7 @@ export const Layout: React.FC = () => {
               <Route path="*" element={<Navigate to="/translation" replace />} />
             </Routes>
           </main>
-        )
+        </>
       )}
       {/* Chatbot FAB (Floating Action Button) */}
       <div className="fixed right-0 z-10 opacity-70 hover:opacity-100 bottom-10 md:right-[-25px] p-2 md:p-6 mt-12">
