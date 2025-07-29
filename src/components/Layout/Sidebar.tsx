@@ -9,7 +9,7 @@ export const Sidebar: React.FC = () => {
   const { sidebarOpen, setSidebarOpen } = useAppStore();
 
   const menuItems = [
-    { id: 'translate', icon: Languages, label: 'Translation Hub', description: 'Translate between languages' },
+    { id: 'translation', icon: Languages, label: 'Translation Hub', description: 'Translate between languages' },
     { id: 'stories', icon: BookOpen, label: 'Story Explorer', description: 'Discover folktales' },
     { id: 'games', icon: Gamepad2, label: 'Game Hub', description: 'Learn through play' },
     { id: 'profile', icon: User, label: 'Profile', description: 'Your learning journey' },
@@ -18,7 +18,7 @@ export const Sidebar: React.FC = () => {
   ];
 
   const handleNavigate = (pageId: string) => {
-    navigate(`/${pageId}`);
+    navigate(pageId === 'translation' ? '/translation' : `/${pageId}`);
     setSidebarOpen(false);
   };
 
@@ -60,7 +60,8 @@ export const Sidebar: React.FC = () => {
                 <nav className="space-y-2 px-4">
                   {menuItems.map((item) => {
                     const Icon = item.icon;
-                    const isActive = location.pathname === item.id;
+                    const isActive = (item.id === 'translation' && location.pathname === '/translation') ||
+                                     (item.id !== 'translation' && location.pathname === `/${item.id}`);
                     
                     return (
                       <motion.button

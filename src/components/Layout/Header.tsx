@@ -2,8 +2,10 @@ import React from 'react';
 import { Menu, Globe, User, Heart } from 'lucide-react';
 import { useAppStore } from '../../store/useAppStore';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 export const Header: React.FC = () => {
+  const navigate = useNavigate();
   const { setSidebarOpen, sidebarOpen, currentLanguage, availableLanguages, setCurrentLanguage, user, isGuest } = useAppStore();
 
   // const currentLang = availableLanguages.find(lang => lang.code === currentLanguage);
@@ -26,8 +28,9 @@ export const Header: React.FC = () => {
             </button>
             
             <motion.div 
-              className="flex items-center space-x-3"
+              className="flex items-center space-x-3 cursor-pointer"
               whileHover={{ scale: 1.05 }}
+              onClick={() => navigate('/')}
             >
               <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-500 rounded-lg flex items-center justify-center">
                 <Heart className="h-6 w-6 text-white" />
