@@ -12,6 +12,7 @@ import { RxCross2 } from 'react-icons/rx';
 import LandingPage from '../LandingPage/LandingPage';
 import ProfilePage from '../Profile/ProfilePage';
 import SettingsPage from '../Settings/SettingsPage';
+import { MdFullscreen, MdOutlineFullscreenExit } from 'react-icons/md';
 
 interface Message {
   sender: 'user' | 'bot';
@@ -22,6 +23,7 @@ export const Layout: React.FC = () => {
   const location = useLocation();
   const { sidebarOpen } = useAppStore();
   const [ chatbotOpen, setChatbotOpen ] = useState(false);
+  const [ chatbotOpenFullScreen, setChatbotOpenFullScreen ] = useState(false);
 
   const [messages, setMessages] = useState<Message[]>([
     { sender: 'bot', text: 'Hi! How can I help you today?' },
@@ -67,6 +69,10 @@ export const Layout: React.FC = () => {
       handleSendMessage();
     }
   };
+
+  function enableFullScreen() {
+    setChatbotOpenFullScreen((prev) => !prev);
+  }
 
   function toggleChatbot() {
   //   const chatbotIcon = document.getElementById("chatbotIcon");
@@ -121,16 +127,25 @@ export const Layout: React.FC = () => {
         )
       )}
       {/* Chatbot FAB (Floating Action Button) */}
-      <div className="fixed right-0 z-10 opacity-70 hover:opacity-100 bottom-10 md:right-[-25px] p-6 mt-12">
+      <div className="fixed right-0 z-10 opacity-70 hover:opacity-100 bottom-10 md:right-[-25px] p-2 md:p-6 mt-12">
         <TbMessageChatbotFilled size={50} onClick={toggleChatbot} id='chatbotIcon' aria-label='Cultura Chatbot' title='Cultura Chatbot' className='cursor-pointer hover:scale-110 duration-200' />
       </div>
       {/* Chatbot Container - always visible */}
       <div
         id="chatbotContainer"
-        className={`chatbot-container fixed bottom-0 right-0 w-full md:w-1/3 h-2/3 md:h-1/2 bg-white rounded-tl-xl shadow-2xl flex flex-col z-40 ${chatbotOpen ? 'block' : 'hidden'}`}
+        className={`chatbot-container max-sm:p-0 max-sm:border max-sm:border-blue-600 fixed rounded-lg ${chatbotOpenFullScreen === true ? 'h-[90%] bottom-0 right-0 w-full mx-auto' : 'bottom-5 right-5 md:w-1/3 md:h-1/2 w-[90%]'} h-2/3 bg-white rounded-tl-xl shadow-2xl flex flex-col z-40 ${chatbotOpen ? 'block' : 'hidden'}`}
       >
         <div className="bg-blue-600 text-white p-4 rounded-tl-xl flex justify-between items-center">
-          <h3 className="text-lg font-semibold">Cultura-ai Chatbot</h3>
+          <div className="flex gap-2">
+            <button id="closeChatbotFullScreen" className="text-white hover:text-gray-200 focus:outline-none" onClick={enableFullScreen} aria-label="Enable Fullscreen">
+              {chatbotOpenFullScreen === false ? (
+                <MdFullscreen title='Fullscreen' className='my-auto hover:scale-105 cursor-pointer' size={30} />
+              ) : (
+                <MdOutlineFullscreenExit title='Fullscreen' className='my-auto hover:scale-105 cursor-pointer' size={30} />
+              )}
+            </button>
+            <h3 className="text-lg font-semibold">Cultura-ai Chatbot</h3>
+          </div>
           <button
             id="closeChatbot"
             className="text-white hover:text-gray-200 focus:outline-none"
@@ -138,7 +153,7 @@ export const Layout: React.FC = () => {
             aria-label="Close chatbot"
           >
             <div>
-              <RxCross2 size={30} />
+              <RxCross2 title='Close Chatbot' className='my-auto hover:scale-105 cursor-pointer' size={30} />
             </div>
           </button>
         </div>
@@ -152,20 +167,11 @@ export const Layout: React.FC = () => {
           ))}
         </div>
         <div className="p-4 border-t border-gray-200 flex items-center">
-          <input
-            type="text"
-            id="chatInput"
-            placeholder="Type your message..."
-            className="flex-grow p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mr-3"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyPress={handleKeyPress}
-          />
-          <button
-            id="sendMessage"
+          <input type="text" id="chatInput" placeholder="Type your message..."
+            className="flex-grow p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mr-3" value={inputValue} onChange={(e) => setInputValue(e.target.value)} onKeyPress={handleKeyPress} />
+          <button id="sendMessage"
             className="px-5 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150 ease-in-out"
-            onClick={handleSendMessage}
-          >
+            onClick={handleSendMessage}>
             Send
           </button>
         </div>
