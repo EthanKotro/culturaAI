@@ -12,6 +12,7 @@
     "preview": "vite preview --host 0.0.0.0 --port 3000"
   },
   "dependencies": {
+    "@google/genai": "^1.12.0",
     "axios": "^1.11.0",
     "framer-motion": "^12.18.1",
     "lucide-react": "^0.522.0",

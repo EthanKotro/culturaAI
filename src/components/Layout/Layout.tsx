@@ -7,12 +7,13 @@ import { GameHub } from '../Games/GameHub';
 import { useAppStore } from '../../store/useAppStore';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { TbMessageChatbotFilled } from 'react-icons/tb';
-import axios from 'axios';
+// import axios from 'axios';
 import { RxCross2 } from 'react-icons/rx';
 import LandingPage from '../LandingPage/LandingPage';
 import ProfilePage from '../Profile/ProfilePage';
 import SettingsPage from '../Settings/SettingsPage';
 import { MdFullscreen, MdOutlineFullscreenExit } from 'react-icons/md';
+import { GoogleGenAI } from "@google/genai";
 
 interface Message {
   sender: 'user' | 'bot';
@@ -24,11 +25,14 @@ export const Layout: React.FC = () => {
   const { sidebarOpen } = useAppStore();
   const [ chatbotOpen, setChatbotOpen ] = useState(false);
   const [ chatbotOpenFullScreen, setChatbotOpenFullScreen ] = useState(false);
+  const [ loadingMessgage, setLoadingMessage ] = useState(false);
+
+  const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GOOGLE_GENAI_API_KEY });
 
   const [messages, setMessages] = useState<Message[]>([
-    { sender: 'bot', text: 'Hi! How can I help you today?' },
-    { sender: 'user', text: 'What is the weather like in Nairobi?' },
-    { sender: 'bot', text: 'Today in Nairobi it’s sunny with a high of 27°C.' },
+    { sender: 'bot', text: 'This is Cultura AI chatbot! How can I help you today?' },
+    // { sender: 'user', text: 'What is the weather like in Nairobi?' },
+    // { sender: 'bot', text: 'Today in Nairobi it’s sunny with a high of 27°C.' },
   ]);
 
   const [inputValue, setInputValue] = useState('');
@@ -41,27 +45,50 @@ export const Layout: React.FC = () => {
     const userMsg: Message = { sender: 'user', text: inputValue.trim() };
     setMessages((prev) => [...prev, userMsg])
     setInputValue('');
+    setLoadingMessage(true);
 
-    try{
-      const response = await axios.post("http://localhost:8000/api/v1/chatbot/", {
-        message:inputValue.trim(),
-      });
-
-      const botReply: Message = { sender: 'bot', text: response.data.reply };
-      setMessages((prev) => [...prev, botReply]);
-      
-    } catch (error) {
-      console.error('Error sending message:', error);
-      setMessages((prev) => [...prev, { sender: 'bot', text: 'Oops, failed to reach the server.' }]);
-    }
-
-    // Auto-scroll to bottom
+    const thinkingMsg: Message = { sender: 'bot', text: 'Thinking...' };
+    setMessages((prev) => [...prev, thinkingMsg]);
+    
     setTimeout(() => {
       chatHistoryRef.current?.scrollTo({
         top: chatHistoryRef.current.scrollHeight,
         behavior: 'smooth',
       });
     }, 100);
+
+    try{
+      const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: userMsg.text,
+      // contents: "Explain how AI works in a few words",
+    });
+      // const response = await axios.post("http://localhost:8000/api/v1/chatbot/", {
+      //   message:inputValue.trim(),
+      // });
+      console.log(" reply: ",response)
+
+      const botReply: Message = { sender: 'bot', text: response.text ?? '' };
+      setMessages((prev) => {
+        const updated = [...prev];
+        updated[updated.length - 1] = { sender: 'bot', text: response.text ?? '...' };
+        return updated;[...prev, botReply]
+      });
+      
+    } catch (error) {
+      console.error('Error sending message:', error);
+      setMessages((prev) => [...prev, { sender: 'bot', text: 'Oops, failed to reach the server.' }]);
+    } finally {
+      setLoadingMessage(false);
+      // Auto-scroll to bottom
+      setTimeout(() => {
+        chatHistoryRef.current?.scrollTo({
+          top: chatHistoryRef.current.scrollHeight,
+          behavior: 'smooth',
+        });
+      }, 100);
+    }
+
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -155,13 +182,17 @@ export const Layout: React.FC = () => {
           </button>
         </div>
         <div ref={chatHistoryRef} id="chatHistory" className="chat-history flex-grow p-4 overflow-y-auto space-y-4">
-          {messages.map((msg, index) => (
-            <div key={index} className={`flex mb-2 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`p-3 rounded-lg max-w-[80%] shadow-sm ${msg.sender === 'user' ? 'bg-blue-100 text-blue-800' : 'bg-gray-200 text-gray-800'}`}>
-                {msg.text}
+          {/* <div className="flex justify-center items-center h-full">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          </div> */}
+            {messages.map((msg, index) => (
+              <div key={index} className={`flex mb-2 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+                <div className={`p-3 rounded-lg max-w-[80%] shadow-sm ${msg.sender === 'user' ? 'bg-blue-100 text-blue-800' : msg.text === 'Thinking...' ? 'bg-gray-100 text-blue-700 italic animate-pulse' : 'bg-gray-200 text-gray-800'}`}>
+                  {msg.text}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          
         </div>
         <div className="p-4 border-t border-gray-200 flex items-center">
           <input type="text" id="chatInput" placeholder="Type your message..."
