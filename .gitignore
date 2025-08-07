@@ -3,3 +3,7 @@ __pycache__
 list_langs.py
 tts_app.py
 save_dataset.ipynb
+test.py
+test_gpu.py
+xtts_test.py
+tts_coqui_app.py

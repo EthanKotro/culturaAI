@@ -7,13 +7,16 @@ import os
 import time
 import re
 
-# Define request model
+# --- FastAPI app setup ---
+app = FastAPI()
+
+# --- Request model ---
 class TranslationRequest(BaseModel):
     source_text: str
     source_language: str
     target_language: str
 
-# Language code map
+# --- Language code map ---
 LANGUAGE_MAP = {
     'en': 'eng_Latn',
     'es': 'spa_Latn',
@@ -27,59 +30,49 @@ LANGUAGE_MAP = {
     'kam': 'kam_Latn',
 }
 
-# Model path setup
+# --- Model setup ---
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-model_path = os.getenv("MODEL_PATH", os.path.join(BASE_DIR, "models/nllb-distilled-v1.0"))
+# model_path = os.getenv("MODEL_PATH", os.path.join(BASE_DIR, "models/nllb-distilled-v1.0"))
+model_path = os.path.join(BASE_DIR, "models/nllb-distilled-v1.0/models--facebook--nllb-200-distilled-600M/snapshots/f8d333a098d19b4fd9a8b18f94170487ad3f821d")
 
-# Detect device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(f"🚀 Loading model to device: {device}")
 
-# Load model and tokenizer
-print(f"Loading model to device: {device}")
 model = AutoModelForSeq2SeqLM.from_pretrained(model_path, local_files_only=True)
 tokenizer = AutoTokenizer.from_pretrained(model_path, local_files_only=True)
 
-# Convert to half precision if GPU is available
 if device.type == "cuda":
+    print("🧠 Using FP16 precision on GPU")
     model = model.half()
 model = model.to(device)
 
-# --- Utility: Split text into chunks under 500 characters ---
-import re
-
+# --- Split input text into chunks ---
 def split_text(text, max_length=500):
-    # Normalize quotes
     text = text.replace("“", "\"").replace("”", "\"").replace("‘", "'").replace("’", "'")
-
-    # Split using non-lookbehind: match punctuation followed by quotes and space
-    sentences = re.split(r'([.!?]["\']?\s)', text)  # Keep delimiters
-
+    sentences = re.split(r'([.!?]["\']?\s)', text)
     chunks = []
     current = ""
 
     for i in range(0, len(sentences), 2):
         sentence = sentences[i]
         if i + 1 < len(sentences):
-            sentence += sentences[i + 1]  # include punctuation + space
-
+            sentence += sentences[i + 1]
         if len(current) + len(sentence) <= max_length:
             current += sentence
         else:
             chunks.append(current.strip())
             current = sentence
-
     if current.strip():
         chunks.append(current.strip())
-
     return chunks
 
-
-# Translation function (multi-chunk support)
+# --- Translation logic ---
 def translate_text(source_text: str, src_lang: str, tgt_lang: str) -> str:
     tokenizer.src_lang = src_lang
     forced_bos_token_id = tokenizer.convert_tokens_to_ids(tgt_lang)
 
     translated_chunks = []
+
     for chunk in split_text(source_text):
         encoded = tokenizer(
             chunk,
@@ -88,6 +81,10 @@ def translate_text(source_text: str, src_lang: str, tgt_lang: str) -> str:
             truncation=True,
             max_length=512
         ).to(device)
+
+        # 🧠 Print where inputs and model live
+        print(f"📦 Encoded input is on: {encoded.input_ids.device}")
+        print(f"🧠 Model is on: {next(model.parameters()).device}")
 
         with torch.no_grad():
             generated_tokens = model.generate(
@@ -102,9 +99,7 @@ def translate_text(source_text: str, src_lang: str, tgt_lang: str) -> str:
 
     return " ".join(translated_chunks)
 
-# FastAPI setup
-app = FastAPI()
-
+# --- FastAPI route ---
 @app.post("/translate/")
 async def translate(request: TranslationRequest):
     src = LANGUAGE_MAP.get(request.source_language)
@@ -113,18 +108,18 @@ async def translate(request: TranslationRequest):
     if not src or not tgt:
         return {"error": "Unsupported language pair"}
 
-    print(f"\nTranslating from {src} to {tgt}")
-    print(f"Input text length: {len(request.source_text)} characters")
+    print(f"\n🌍 Translating from {src} to {tgt}")
+    print(f"📄 Input text length: {len(request.source_text)} characters")
 
     start_time = time.time()
     translated_text = await run_in_threadpool(translate_text, request.source_text, src, tgt)
     end_time = time.time()
+
     translation_time = round(end_time - start_time, 2)
 
-    print("Translation complete!")
-    print(f"Translated output:\n{translated_text}")
-    print(f"Translation time: {translation_time} seconds")
-    print("-" * 50)
+    print("✅ Translation complete!")
+    print(f"🕒 Time taken: {translation_time} seconds")
+    print("-" * 60)
 
     return {
         "translated_text": translated_text,
