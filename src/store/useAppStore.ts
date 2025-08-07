@@ -54,6 +54,7 @@ interface AppState {
   // User
   user: User | null;
   isGuest: boolean;
+
   
   // UI state
   sidebarOpen: boolean;
@@ -105,4 +106,4 @@ export const useAppStore = create<AppState>((set) => ({
   setUser: (user) => set({ user, isGuest: !user }),
   setIsGuest: (isGuest) => set({ isGuest }),
   setSidebarOpen: (open) => set({ sidebarOpen: open }),
-}));
+  }));

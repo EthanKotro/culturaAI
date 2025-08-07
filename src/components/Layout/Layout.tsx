@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Header } from './Header';
 import { Sidebar } from './Sidebar';
-import { TranslationHub } from '../Translation/TranslationHub';
+import TranslationHub from '../Translation/TranslationHub';
 import { StoryExplorer } from '../Stories/StoryExplorer';
 import { GameHub } from '../Games/GameHub';
 import { useAppStore } from '../../store/useAppStore';

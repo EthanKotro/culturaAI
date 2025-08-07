@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ArrowLeftRight, Volume2, Copy, History, Mic, Send } from 'lucide-react';
 import { useAppStore } from '../../store/useAppStore';
 import { motion } from 'framer-motion';
 
-export const TranslationHub: React.FC = () => {
-  const { availableLanguages, addTranslation, translations, isTranslating, setIsTranslating } = useAppStore();
+const TranslationHub = () => {
+  const { availableLanguages, addTranslation, translations, isTranslating, setIsTranslating} = useAppStore();
   const [sourceText, setSourceText] = useState('');
   const [translatedText, setTranslatedText] = useState('');
   const [sourceLang, setSourceLang] = useState('en');
   const [targetLang, setTargetLang] = useState('sw');
   const [isListening, setIsListening] = useState(false);
+  const [sourceTtsLoading, setSourceTtsLoading] = useState(false);
+  const [translatedTtsLoading, setTranslatedTtsLoading] = useState(false);
+  const [isPlayingSourceAudio, setIsPlayingSourceAudio] = useState(false);
+  const [isPlayingTranslatedAudio, setIsPlayingTranslatedAudio] = useState(false);
 
   const handleTranslate = async () => {
     if (!sourceText.trim()) return;
@@ -79,9 +83,52 @@ export const TranslationHub: React.FC = () => {
     navigator.clipboard.writeText(text);
   };
 
-  const playAudio = (text: string, lang: string) => {
-    // Placeholder for TTS functionality
-    console.log(`Playing audio for: ${text} in ${lang}`);
+  const handlePlaySourceTTS = async () => {
+    setSourceTtsLoading(true);
+    setIsPlayingSourceAudio(false);
+    try {
+      const response = await fetch('http://localhost:8000/api/v1/tts/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: sourceText, language: sourceLang }),
+      });
+      const blob = await response.blob();
+      const audioUrl = URL.createObjectURL(blob);
+      const audio = new Audio(audioUrl);
+      audio.onplay = () => setIsPlayingSourceAudio(true);
+      audio.onended = () => setIsPlayingSourceAudio(false);
+      audio.onerror = () => setIsPlayingSourceAudio(false);
+      audio.play();
+    } catch (error) {
+      console.error('TTS error:', error);
+      setIsPlayingSourceAudio(false);
+    } finally {
+      setSourceTtsLoading(false);
+    }
+  };
+  
+  const handlePlayTranslatedTTS = async () => {
+    setTranslatedTtsLoading(true);
+    setIsPlayingTranslatedAudio(false);
+    try {
+      const response = await fetch('http://localhost:8000/api/v1/tts/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: translatedText, language: 'en' }),
+      });
+      const blob = await response.blob();
+      const audioUrl = URL.createObjectURL(blob);
+      const audio = new Audio(audioUrl);
+      audio.onplay = () => setIsPlayingTranslatedAudio(true);
+      audio.onended = () => setIsPlayingTranslatedAudio(false);
+      audio.onerror = () => setIsPlayingTranslatedAudio(false);
+      audio.play();
+    } catch (error) {
+      console.error('TTS error:', error);
+      setIsPlayingTranslatedAudio(false);
+    } finally {
+      setTranslatedTtsLoading(false);
+    }
   };
 
   const startListening = () => {
@@ -210,10 +257,17 @@ export const TranslationHub: React.FC = () => {
                 {sourceText && (
                   <>
                     <button
-                      onClick={() => playAudio(sourceText, sourceLang)}
+                      onClick={handlePlaySourceTTS}
+                      disabled={sourceTtsLoading}
                       className="p-2 text-gray-600 hover:text-primary-600 transition-colors"
                     >
-                      <Volume2 className="h-4 w-4" />
+                      {sourceTtsLoading ? (
+                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-primary-600 border-t-transparent"></div>
+                      ) : isPlayingSourceAudio ? (
+                        <div className="voice-bar w-8 h-2 rounded bg-primary-600 animate-voice-bar"></div>
+                      ) : (
+                        <Volume2 className="h-4 w-4" />
+                      )}
                     </button>
                     <button
                       onClick={() => copyToClipboard(sourceText)}
@@ -263,10 +317,17 @@ export const TranslationHub: React.FC = () => {
                 {translatedText && !isTranslating && (
                   <>
                     <button
-                      onClick={() => playAudio(translatedText, targetLang)}
+                      onClick={handlePlayTranslatedTTS}
+                      disabled={translatedTtsLoading}
                       className="p-2 text-gray-600 hover:text-primary-600 transition-colors"
                     >
-                      <Volume2 className="h-4 w-4" />
+                      {translatedTtsLoading ? (
+                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-primary-600 border-t-transparent"></div>
+                      ) : isPlayingTranslatedAudio ? (
+                        <div className="voice-bar w-8 h-2 rounded bg-primary-600 animate-voice-bar"></div>
+                      ) : (
+                        <Volume2 className="h-4 w-4" />
+                      )}
                     </button>
                     <button
                       onClick={() => copyToClipboard(translatedText)}
@@ -350,3 +411,5 @@ export const TranslationHub: React.FC = () => {
     </div>
   );
 };
+
+export default TranslationHub;

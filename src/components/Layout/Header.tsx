@@ -30,7 +30,10 @@ export const Header: React.FC = () => {
             <motion.div 
               className="flex items-center space-x-3 cursor-pointer"
               whileHover={{ scale: 1.05 }}
-              onClick={() => navigate('/')}
+              onClick={() =>{ 
+                setSidebarOpen(false);
+                navigate('/')}}
+              
             >
               <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-500 rounded-lg flex items-center justify-center">
                 <Heart className="h-6 w-6 text-white" />
