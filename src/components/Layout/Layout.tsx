@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Header } from './Header';
 import { Sidebar } from './Sidebar';
 import { TranslationHub } from '../Translation/TranslationHub';
@@ -26,6 +26,16 @@ export const Layout: React.FC = () => {
   const [ chatbotOpen, setChatbotOpen ] = useState(false);
   const [ chatbotOpenFullScreen, setChatbotOpenFullScreen ] = useState(false);
   const [ loadingMessgage, setLoadingMessage ] = useState(false);
+  const quickQstns = [
+    { question: 'How do I translate a legal document from English to Kiswahili?' },
+    { question: 'What are the best practices for legal document translation?' },
+    { question: 'How can I ensure accuracy in translation?' },
+    { question: 'How do I say "good luck" in a respectful way in Kikuyu?' },
+    { question: 'What does “spill the tea” mean in Swahili?' },
+    { question: 'What’s the difference between literal and contextual translation?' },
+  ]
+  const [showSuggestions, setShowSuggestions] = useState(true);
+  const [randomQuestions, setRandomQuestions] = useState<{ question: string }[]>([]);
 
   const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GOOGLE_GENAI_API_KEY });
 
@@ -38,10 +48,18 @@ export const Layout: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
   const chatHistoryRef = useRef<HTMLDivElement | null>(null);
 
+  useEffect(() => {
+    if (chatbotOpen && randomQuestions.length === 0) {
+      const shuffled = [...quickQstns].sort(() => 0.5 - Math.random());
+      setRandomQuestions(shuffled.slice(0, 3));
+    }
+  }, [chatbotOpen]);
+
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
 
     // setMessages([...messages, { sender: 'user', text: inputValue.trim() }]);
+    setShowSuggestions(false);
     const userMsg: Message = { sender: 'user', text: inputValue.trim() };
     setMessages((prev) => [...prev, userMsg])
     setInputValue('');
@@ -185,6 +203,29 @@ export const Layout: React.FC = () => {
           {/* <div className="flex justify-center items-center h-full">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
           </div> */}
+          {showSuggestions &&
+            messages.length === 1 &&
+            messages[0].sender === 'bot' &&
+            messages[0].text === 'This is Cultura AI chatbot! How can I help you today?' && (
+            <div className="space-y-3">
+              <p className="text-gray-700 font-semibold">Here are some suggestions you can ask me:</p>
+              <div className={`flex text-xs p-1 text-nowrap gap-2 ${chatbotOpenFullScreen ? 'flex' : 'flex-col'} space-y-2 md:space-y-0 md:space-x-2`}>
+                {randomQuestions.map((q, index) => (
+                  <button
+                    key={index}
+                    className="text-left bg-gray-100 hover:bg-blue-100 text-gray-800 px-4 py-2 rounded-lg shadow-sm transition duration-200"
+                    onClick={() => {
+                      setInputValue(q.question);
+                      setShowSuggestions(false);
+                      handleSendMessage();
+                    }}
+                  >
+                    {q.question}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
             {messages.map((msg, index) => (
               <div key={index} className={`flex mb-2 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`p-3 rounded-lg max-w-[80%] shadow-sm ${msg.sender === 'user' ? 'bg-blue-100 text-blue-800' : msg.text === 'Thinking...' ? 'bg-gray-100 text-blue-700 italic animate-pulse' : 'bg-gray-200 text-gray-800'}`}>
@@ -196,7 +237,7 @@ export const Layout: React.FC = () => {
         </div>
         <div className="p-4 border-t border-gray-200 flex items-center">
           <input type="text" id="chatInput" placeholder="Type your message..."
-            className="flex-grow p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mr-3" value={inputValue} onChange={(e) => setInputValue(e.target.value)} onKeyPress={handleKeyPress} />
+            className="flex-grow p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mr-3" value={inputValue} onChange={(e) => { setInputValue(e.target.value); setShowSuggestions(false); }} onKeyPress={handleKeyPress} />
           <button id="sendMessage"
             className="px-5 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150 ease-in-out"
             onClick={handleSendMessage}>
