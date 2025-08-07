@@ -19,6 +19,7 @@ urlpatterns = [
         path('translations/', include('apps.translations.urls')),
         path('stories/', include('apps.stories.urls')),
         path('games/', include('apps.games.urls')),
+        path('tts/', include('apps.tts_service.urls')),
     ])),
     
     # API Root

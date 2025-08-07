@@ -65,7 +65,7 @@ def translate_text(request):
                     "source_language": source_lang,
                     "target_language": target_lang,
                 },
-                timeout=30
+                timeout=100
             )
             if ai_response.status_code != 200:
                 return Response({"error": "Translation service failed."}, status=ai_response.status_code)
