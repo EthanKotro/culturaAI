@@ -21,6 +21,10 @@ interface Message {
 }
 
 export const Layout: React.FC = () => {
+
+  const CHATBOT_HISTORY_KEY = 'cultura_chatbot_history';
+  const CHATBOT_STATE_KEY = 'cultura_chatbot_state';
+
   const location = useLocation();
   const { sidebarOpen } = useAppStore();
   const [ chatbotOpen, setChatbotOpen ] = useState(false);
@@ -47,6 +51,29 @@ export const Layout: React.FC = () => {
 
   const [inputValue, setInputValue] = useState('');
   const chatHistoryRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+  // Load saved chatbot messages
+  const savedMessages = sessionStorage.getItem(CHATBOT_HISTORY_KEY);
+  const savedChatbotOpen = sessionStorage.getItem(CHATBOT_STATE_KEY);
+
+  if (savedMessages) {
+    setMessages(JSON.parse(savedMessages));
+  }
+
+  if (savedChatbotOpen === 'true') {
+    setChatbotOpen(true);
+  }
+}, []);
+
+  useEffect(() => {
+    sessionStorage.setItem(CHATBOT_HISTORY_KEY, JSON.stringify(messages));
+  }, [messages]);
+
+  useEffect(() => {
+    // Save chatbot open/closed state
+    sessionStorage.setItem(CHATBOT_STATE_KEY, chatbotOpen.toString());
+  }, [chatbotOpen]);
 
   useEffect(() => {
     if (chatbotOpen && randomQuestions.length === 0) {
@@ -78,15 +105,30 @@ export const Layout: React.FC = () => {
     try{
       const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
-      contents: userMsg.text,
+      contents: [
+        "You are Cultura AI. Answer clearly and briefly, in 1–2 sentences. Do not use markdown, asterisks, or bold formatting. Be culturally accurate and context-aware.",
+        userMsg.text,
+      ],
+      // contents: [
+      //   {
+      //     role: "user",
+      //     parts: [
+      //       `You are Cultura AI. Answer clearly and briefly, in 1–2 sentences. Do not use markdown, asterisks, or bold formatting. Be culturally accurate and context-aware.`,
+      //     ],
+      //   },
+      //   {
+      //     role: "user",
+      //     parts: [userMsg.text],
+      //   },
+      // ],
       // contents: "Explain how AI works in a few words",
     });
       // const response = await axios.post("http://localhost:8000/api/v1/chatbot/", {
       //   message:inputValue.trim(),
       // });
-      console.log(" reply: ",response)
 
-      const botReply: Message = { sender: 'bot', text: response.text ?? '' };
+      const cleanedText = (response.text ?? '').replace(/\*\*(.*?)\*\*/g, '$1').replace(/\*(.*?)\*/g, '$1');
+      const botReply: Message = { sender: 'bot', text: cleanedText };
       setMessages((prev) => {
         const updated = [...prev];
         updated[updated.length - 1] = { sender: 'bot', text: response.text ?? '...' };
