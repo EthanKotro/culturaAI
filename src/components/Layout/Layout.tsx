@@ -36,6 +36,7 @@ export const Layout: React.FC = () => {
     { question: 'How can I ensure accuracy in translation?' },
     { question: 'How do I say "good luck" in a respectful way in Kikuyu?' },
     { question: 'What does “spill the tea” mean in Swahili?' },
+    { question: 'What is this web app about' },
     { question: 'What’s the difference between literal and contextual translation?' },
   ]
   const [showSuggestions, setShowSuggestions] = useState(true);
